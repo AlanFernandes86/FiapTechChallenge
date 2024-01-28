@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechChallenge.Api", "TechChallenge.Api\TechChallenge.Api.csproj", "{AD4CC067-F249-4465-8E8B-A202A2CB2FDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechChallenge.Api", "src\Adapters\TechChallenge.Api\TechChallenge.Api.csproj", "{AD4CC067-F249-4465-8E8B-A202A2CB2FDA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DB1765B4-9BAA-4B84-A376-3A3D04D111DF}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,15 +13,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DB1765B4-9BA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{7A8D9601-5BCE-476C-8CDC-0088FAEC8BC7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechChallenge.Domain", "TechChallenge.Domain\TechChallenge.Domain.csproj", "{D5E6FE2A-F218-4D49-A517-51A95A77B951}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechChallenge.Domain", "src\Core\TechChallenge.Domain\TechChallenge.Domain.csproj", "{D5E6FE2A-F218-4D49-A517-51A95A77B951}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechChallenge.Application", "TechChallenge.Application\TechChallenge.Application.csproj", "{5B8FD5B6-06E8-4255-8ADC-F3D53D4ACB02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechChallenge.Application", "src\Core\TechChallenge.Application\TechChallenge.Application.csproj", "{5B8FD5B6-06E8-4255-8ADC-F3D53D4ACB02}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Adapters", "Adapters", "{35FC0027-AE17-49BA-8D65-76EFF7E9F726}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E3768B8D-3BDC-4AA1-9897-E0B9919D5119}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechChallenge.Infra", "TechChallenge.Infra\TechChallenge.Infra.csproj", "{333BADD1-0CD9-4CC7-A9E1-2BFC1A558826}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechChallenge.Infra", "src\Adapters\TechChallenge.Infra\TechChallenge.Infra.csproj", "{333BADD1-0CD9-4CC7-A9E1-2BFC1A558826}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{72454F7A-F8F9-497F-A82B-F95A7DDE9D77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{333BADD1-0CD9-4CC7-A9E1-2BFC1A558826}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{333BADD1-0CD9-4CC7-A9E1-2BFC1A558826}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{333BADD1-0CD9-4CC7-A9E1-2BFC1A558826}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72454F7A-F8F9-497F-A82B-F95A7DDE9D77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72454F7A-F8F9-497F-A82B-F95A7DDE9D77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72454F7A-F8F9-497F-A82B-F95A7DDE9D77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72454F7A-F8F9-497F-A82B-F95A7DDE9D77}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

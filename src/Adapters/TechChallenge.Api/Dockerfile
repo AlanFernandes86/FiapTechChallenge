@@ -7,10 +7,13 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["TechChallenge.Api/TechChallenge.Api.csproj", "."]
-RUN dotnet restore "./TechChallenge.Api.csproj"
+COPY ["src/Adapters/TechChallenge.Api/TechChallenge.Api.csproj", "src/Adapters/TechChallenge.Api/"]
+COPY ["src/Adapters/TechChallenge.Infra/TechChallenge.Infra.csproj", "src/Adapters/TechChallenge.Infra/"]
+COPY ["src/Core/TechChallenge.Application/TechChallenge.Application.csproj", "src/Core/TechChallenge.Application/"]
+COPY ["src/Core/TechChallenge.Domain/TechChallenge.Domain.csproj", "src/Core/TechChallenge.Domain/"]
+RUN dotnet restore "src/Adapters/TechChallenge.Api/TechChallenge.Api.csproj"
 COPY . .
-WORKDIR "/src/TechChallenge.Api"
+WORKDIR "/src/src/Adapters/TechChallenge.Api"
 RUN dotnet build "TechChallenge.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish

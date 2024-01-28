@@ -8,13 +8,13 @@ namespace TechChallenge.Infra
 {
     public static class DependencyInjection
     {
-        public static void AddInfrastructure(this IServiceCollection services)
+        public static void AddPortsAndAdapters(this IServiceCollection services)
         {
-            services.AddPorts();
-            services.AddAdapters();
+            services.AddServices();
+            services.AddRepositories();
         }
 
-        public static void AddPorts(this IServiceCollection services)
+        public static void AddServices(this IServiceCollection services)
         {
             services.AddTransient<IClientService, ClientService>();
             services.AddTransient<IOrderService, OrderService>();
@@ -22,7 +22,7 @@ namespace TechChallenge.Infra
             services.AddTransient<IProductService, ProductService>();
         }
 
-        public static void AddAdapters(this IServiceCollection services)
+        public static void AddRepositories(this IServiceCollection services)
         {
             services.AddTransient<IClientRepository, ClientRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();

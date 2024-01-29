@@ -4,6 +4,6 @@ namespace TechChallenge.Domain.Ports.Repositories;
 
 public interface IClientRepository
 {
-    Task<bool> SetClient(Client client);
+    Task<bool> PutClient(Client client);
     Task<Client?> GetClient(long cpf);
 }

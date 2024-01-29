@@ -57,7 +57,7 @@ public class ProductRepository : IProductRepository
         }
     }
 
-    public async Task<int> SetProduct(Product product)
+    public async Task<int> PutProduct(Product product)
     {
         var sql = @"MERGE INTO [dbo].[product] AS target
                     USING (
@@ -123,7 +123,7 @@ public class ProductRepository : IProductRepository
         }
     }
 
-    public async Task<bool> SetProductCategory(ProductCategory productCategory)
+    public async Task<bool> PutProductCategory(ProductCategory productCategory)
     {
         var sql = @"MERGE INTO [dbo].[product_category] AS target
                     USING (

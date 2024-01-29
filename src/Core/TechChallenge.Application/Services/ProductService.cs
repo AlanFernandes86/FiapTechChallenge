@@ -16,7 +16,7 @@ public class ProductService : IProductService
 
     public Task<IEnumerable<Product>?> GetProductsByCategory(int categoryId) => _productRepository.GetProductsByCategory(categoryId);
 
-    public Task<int> SetProduct(Product product) => _productRepository.SetProduct(product);
+    public Task<int> PutProduct(Product product) => _productRepository.PutProduct(product);
 
-    public Task<bool> SetProductCategory(ProductCategory productCategory) => _productRepository.SetProductCategory(productCategory);
+    public Task<bool> PutProductCategory(ProductCategory productCategory) => _productRepository.PutProductCategory(productCategory);
 }

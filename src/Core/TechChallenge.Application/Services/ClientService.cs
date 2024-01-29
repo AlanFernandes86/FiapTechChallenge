@@ -15,5 +15,5 @@ public class ClientService : IClientService
 
     public async Task<Client?> GetClient(long cpf) => await _clientRepository.GetClient(cpf);
 
-    public async Task<bool> SetClient(Client client) => await _clientRepository.SetClient(client);
+    public async Task<bool> PutClient(Client client) => await _clientRepository.PutClient(client);
 }

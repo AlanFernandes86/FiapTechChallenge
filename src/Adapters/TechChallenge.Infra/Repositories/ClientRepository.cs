@@ -37,7 +37,7 @@ public class ClientRepository: IClientRepository
         }        
     }
 
-    public async Task<bool> SetClient(Client client)
+    public async Task<bool> PutClient(Client client)
     {
         var sql = @"MERGE INTO [dbo].[client] AS target
                     USING (

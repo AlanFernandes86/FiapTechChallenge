@@ -26,7 +26,7 @@ namespace TechChallengeApi.Controllers
         [HttpPut]
         public async Task<IActionResult> SetClient(Client client)
         {
-            var result = await _clientService.SetClient(client);
+            var result = await _clientService.PutClient(client);
 
             return result ? Ok() : BadRequest();
         }

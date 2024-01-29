@@ -25,9 +25,9 @@ namespace TechChallengeApi.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> SetProduct(Product product)
+        public async Task<IActionResult> PutProduct(Product product)
         {
-            var result = await _productService.SetProduct(product);
+            var result = await _productService.PutProduct(product);
 
             return result != -1 ? Ok(new { id = result }) : BadRequest();
         }
@@ -41,9 +41,9 @@ namespace TechChallengeApi.Controllers
         }
 
         [HttpPut("Category")]
-        public async Task<IActionResult> SetProductCategory(ProductCategory productCategory)
+        public async Task<IActionResult> PutProductCategory(ProductCategory productCategory)
         {
-            var result = await _productService.SetProductCategory(productCategory);
+            var result = await _productService.PutProductCategory(productCategory);
 
             return result ? Ok() : BadRequest();
         }        

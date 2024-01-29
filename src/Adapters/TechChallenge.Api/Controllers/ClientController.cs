@@ -16,9 +16,19 @@ namespace TechChallengeApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetClient()
+        public async Task<IActionResult> GetClient(long cpf)
         {
-            return Ok(new List<Client>());
+            var result = await _clientService.GetClient(cpf);
+
+            return result is not null ? Ok(result) : NotFound();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> SetClient(Client client)
+        {
+            var result = await _clientService.SetClient(client);
+
+            return result ? Ok() : BadRequest();
         }
     }
 }

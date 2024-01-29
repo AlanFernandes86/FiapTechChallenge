@@ -19,4 +19,8 @@ public class OrderService : IOrderService
     public async Task<int> CreateOrder(Order order) => await _orderRepository.CreateOrder(order);    
 
     public async Task<int> PutProductToOrder(OrderProduct orderProduct, int orderId) => await _orderRepository.PutProductToOrder(orderProduct, orderId);
+
+    public async Task<Order?> GetOrdersById(int orderId) => await _orderRepository.GetOrdersById(orderId);
+
+    public async Task<int> RemoveProductToOrder(int orderProductId) => await _orderRepository.RemoveProductToOrder(orderProductId);
 }

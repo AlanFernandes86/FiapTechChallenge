@@ -67,6 +67,56 @@ public class OrderRepository: IOrderRepository
         }
     }
 
+    public async Task<Order?> GetOrdersById(int orderId)
+    {
+        var sql = @"SELECT o.[id]
+                      ,o.[order_status_id] as StatusId
+                      ,o.[client_cpf] as ClientCpf
+                      ,o.[updated_at]
+                      ,o.[created_at]
+                      ,op.[id]
+                      ,op.[product_id] as ProductId
+                      ,op.[price] as Price
+                      ,op.[quantity] as Quantity
+                      ,p.[name] 
+                  FROM [TechChallenge].[dbo].[order] o
+                    LEFT JOIN
+                        [TechChallenge].[dbo].[order_product] op ON o.id = op.order_id
+                    LEFT JOIN
+                        [TechChallenge].[dbo].[product] p ON op.product_id = p.id
+                  WHERE o.[id] = @orderId";
+
+        var parameters = new DynamicParameters();
+        parameters.Add("orderId", orderId);
+
+        try
+        {
+            Order? result = null;
+
+            await _dbConnection.QueryAsync<Order, OrderProduct, Product, Order>(sql, (order, orderProduct, product) =>
+            {
+                if (result == null)
+                {
+                    result = order;
+                }
+
+                if (orderProduct is not null)
+                {
+                    orderProduct.ProductName = product.Name;
+                    result.Products.Add(orderProduct);
+                }
+
+                return order;
+            }, parameters, splitOn: "id,name");
+
+            return result;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
+
     public async Task<int> CreateOrder(Order order)
     {
         using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
@@ -175,8 +225,25 @@ public class OrderRepository: IOrderRepository
         }
     }
 
-    //public async Task<int> RemoveProductToOrder(OrderProduct orderProduct, int OrderId)
-    //{
+    public async Task<int> RemoveProductToOrder(int orderProductId)
+    {
+        var sql = @"DELETE FROM [dbo].[order_product]
+                        OUTPUT DELETED.id
+                        WHERE [id] = @orderProductId";
 
-    //}
+
+        var parameters = new DynamicParameters();
+        parameters.Add("orderProductId", orderProductId);
+
+        try
+        {
+            var orderId = await _dbConnection.QueryFirstOrDefaultAsync<int>(sql, parameters);
+
+            return orderId > 0 ? orderId : -1;
+        }
+        catch (Exception e)
+        {
+            return -1;
+        }
+    }
 }

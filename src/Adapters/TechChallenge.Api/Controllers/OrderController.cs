@@ -17,10 +17,18 @@ namespace TechChallengeApi.Controllers
             _orderService = orderService;            
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetOrder(OrderStatus orderStatus)
+        [HttpGet("ByStatus")]
+        public async Task<IActionResult> GetOrderByStatus(OrderStatus orderStatus)
         {
             var result = await _orderService.GetOrderByStatus(orderStatus);
+
+            return result is not null ? Ok(result) : NotFound();
+        }
+
+        [HttpGet("ById")]
+        public async Task<IActionResult> GetOrderById(int orderId)
+        {
+            var result = await _orderService.GetOrdersById(orderId);
 
             return result is not null ? Ok(result) : NotFound();
         }
@@ -37,6 +45,14 @@ namespace TechChallengeApi.Controllers
         public async Task<IActionResult> PutProductToOrder(OrderProduct orderProduct, int orderId)
         {
             var result = await _orderService.PutProductToOrder(orderProduct, orderId);
+
+            return result != -1 ? Ok(new { id = result }) : BadRequest();
+        }
+
+        [HttpDelete("Product")]
+        public async Task<IActionResult> RemoveProductToOrder(int orderProductId)
+        {
+            var result = await _orderService.RemoveProductToOrder(orderProductId);
 
             return result != -1 ? Ok(new { id = result }) : BadRequest();
         }

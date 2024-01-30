@@ -10,4 +10,5 @@ public interface IOrderService
     Task<IEnumerable<Order>> GetOrderByStatus(OrderStatus orderStatus);
     Task<Order?> GetOrdersById(int orderId);
     Task<int> RemoveProductToOrder(int orderProductId);
+    Task<int> UpdateOrderStatus(int orderId, OrderStatus orderStatus);
 }

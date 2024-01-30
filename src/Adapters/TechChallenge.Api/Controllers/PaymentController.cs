@@ -15,10 +15,12 @@ namespace TechChallengeApi.Controllers
             _paymentService = paymentService;            
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetPayment()
+        [HttpPost]
+        public async Task<IActionResult> SetPayment(Payment payment)
         {
-            return Ok(new List<Payment>());
+            var result = await _paymentService.SetPayment(payment);
+
+            return result != -1 ? Ok(new { id = result }) : BadRequest();
         }
     }
 }

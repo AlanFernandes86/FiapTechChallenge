@@ -24,7 +24,7 @@ namespace TechChallengeApi.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> SetClient(Client client)
+        public async Task<IActionResult> PutClient(Client client)
         {
             var result = await _clientService.PutClient(client);
 

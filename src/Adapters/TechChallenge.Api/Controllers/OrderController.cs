@@ -17,6 +17,14 @@ namespace TechChallengeApi.Controllers
             _orderService = orderService;            
         }
 
+        [HttpPatch("Status")]
+        public async Task<IActionResult> UpdateOrderStatus(int orderId, OrderStatus orderStatus)
+        {
+            var result = await _orderService.UpdateOrderStatus(orderId, orderStatus);
+
+            return result != -1 ? Ok(new { id = result, status = orderStatus }) : BadRequest();
+        }
+
         [HttpGet("ByStatus")]
         public async Task<IActionResult> GetOrderByStatus(OrderStatus orderStatus)
         {

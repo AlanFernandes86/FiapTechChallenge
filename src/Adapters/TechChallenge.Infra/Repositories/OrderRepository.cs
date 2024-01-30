@@ -246,4 +246,28 @@ public class OrderRepository: IOrderRepository
             return -1;
         }
     }
+
+    public async Task<int> UpdateOrderStatus(int orderId, OrderStatus orderStatus)
+    {
+        var sql = @"UPDATE [dbo].[order]
+                       SET [order_status_id] = @orderStatus
+                          ,[updated_at] = GETDATE()
+                     OUTPUT INSERTED.id
+                     WHERE [id] = @orderId";
+
+        var parameters = new DynamicParameters();
+        parameters.Add("orderId", orderId);
+        parameters.Add("orderStatus", orderStatus);
+
+        try
+        {
+            var updatedId = await _dbConnection.QueryFirstOrDefaultAsync<int>(sql, parameters);
+
+            return updatedId > 0 ? updatedId : -1;
+        }
+        catch (Exception e)
+        {
+            return -1;
+        }
+    }
 }

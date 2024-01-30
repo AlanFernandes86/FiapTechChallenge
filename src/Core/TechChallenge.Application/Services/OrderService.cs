@@ -23,4 +23,6 @@ public class OrderService : IOrderService
     public async Task<Order?> GetOrdersById(int orderId) => await _orderRepository.GetOrdersById(orderId);
 
     public async Task<int> RemoveProductToOrder(int orderProductId) => await _orderRepository.RemoveProductToOrder(orderProductId);
+
+    public async Task<int> UpdateOrderStatus(int orderId, OrderStatus orderStatus) => await _orderRepository.UpdateOrderStatus(orderId, orderStatus);
 }

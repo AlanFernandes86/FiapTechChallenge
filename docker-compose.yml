@@ -1,0 +1,31 @@
+version: '3.4'
+
+services:
+  techchallenge.api:
+    image: ${DOCKER_REGISTRY-}techchallengeapi
+    build:
+      context: .
+      dockerfile: src/Adapters/TechChallenge.Api/Dockerfile
+    ports:
+      - "63841:443"
+
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    user: root
+    environment:
+      SA_PASSWORD: "SqlServer2019!"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    volumes:
+      - ./data:/var/opt/mssql/data
+
+  mssqltools:
+    image: mcr.microsoft.com/mssql-tools
+    depends_on:
+      - sql-server
+    volumes:
+      - ./database/SetupDatabase.sql:/tmp/SetupDatabase.sql
+    command: /bin/bash -c "sleep 10 && /opt/mssql-tools/bin/sqlcmd -S sql-server -U sa -P SqlServer2019! -d master -i /tmp/SetupDatabase.sql"
+      

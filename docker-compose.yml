@@ -20,3 +20,12 @@ services:
       - "1433:1433"
     volumes:
       - ./data:/var/opt/mssql/data
+
+  mssqltools:
+    image: mcr.microsoft.com/mssql-tools
+    depends_on:
+      - sql-server
+    volumes:
+      - ./database/SetupDatabase.sql:/tmp/SetupDatabase.sql
+    command: /bin/bash -c "sleep 10 && /opt/mssql-tools/bin/sqlcmd -S sql-server -U sa -P SqlServer2019! -d master -i /tmp/SetupDatabase.sql"
+      

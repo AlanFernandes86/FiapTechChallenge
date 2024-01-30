@@ -118,7 +118,6 @@ CREATE TABLE [dbo].[order](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[order_status_id] [int] NOT NULL,
 	[client_cpf] [varchar](11) NULL,
-	[prepare_in_minutes] [int] NULL,
 	[updated_at] [datetime] NOT NULL,
 	[created_at] [datetime] NOT NULL,
  CONSTRAINT [PK_order] PRIMARY KEY CLUSTERED 
@@ -133,9 +132,10 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[order_product](
-	[id] [int] NOT NULL,
+	[id] [int] IDENTITY(1,1) NOT NULL,
 	[product_id] [int] NOT NULL,
 	[order_id] [int] NOT NULL,
+	[quantity] [int] NOT NULL,
 	[price] [float] NOT NULL,
 	[updated_at] [datetime] NOT NULL,
 	[created_at] [datetime] NOT NULL,

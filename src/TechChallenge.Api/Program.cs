@@ -4,8 +4,8 @@ using TechChallenge.Api.Controllers;
 using TechChallenge.Infra;
 
 string[] ApiVersions = { "v1" };
-string AppTitle = "";
-string AppDescription = "";
+string AppTitle = "TechChallenge Fiap - Fase 2";
+string AppDescription = "Aplicação desenvolvida como parte da entrega do TechChallenge da PosTech Fiap - Software Architeture";
 
 var builder = WebApplication.CreateBuilder(args);
 

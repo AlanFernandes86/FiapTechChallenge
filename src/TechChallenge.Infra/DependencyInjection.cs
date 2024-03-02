@@ -2,6 +2,7 @@
 using TechChallenge.Application.Common.UseCase.Interfaces;
 using TechChallenge.Application.Common.UseCase.Models;
 using TechChallenge.Application.Order.GetOrdersByStatus;
+using TechChallenge.Application.Order.SetPayment;
 using TechChallenge.Application.Services;
 using TechChallenge.Domain.Ports.Services;
 using TechChallenge.Domain.Repositories;
@@ -41,5 +42,6 @@ public static class DependencyInjection
     public static void AddUseCases(this IServiceCollection services)
     {
         services.AddTransient<IUseCase<GetOrdersByStatusDAO, UseCaseOutput<IEnumerable<Domain.Entities.Order>>>, GetOrdersByStatusUseCase>();
+        services.AddTransient<IUseCase<SetPaymentDAO, UseCaseOutput<int>>,  SetPaymentUseCase>();
     }
 }

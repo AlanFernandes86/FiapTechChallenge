@@ -40,15 +40,8 @@ public class PaymentRepository: IPaymentRepository
         parameters.Add("value", payment.Value);
         parameters.Add("method", payment.Method);
 
-        try
-        {
-            var paymentId = await _dbConnection.QueryFirstOrDefaultAsync<int>(sql, parameters);
+        var paymentId = await _dbConnection.QueryFirstOrDefaultAsync<int>(sql, parameters);
 
-            return paymentId > 0 ? paymentId : -1;
-        }
-        catch (Exception e)
-        {
-            return -1;
-        }
+        return paymentId > 0 ? paymentId : -1;
     }
 }

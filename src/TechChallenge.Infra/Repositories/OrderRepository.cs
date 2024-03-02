@@ -39,33 +39,26 @@ public class OrderRepository: IOrderRepository
         var parameters = new DynamicParameters();
         parameters.Add("orderStatus", orderStatus);
 
-        try
-        {
-            var lookup = new Dictionary<int?, Order>();
+        var lookup = new Dictionary<int?, Order>();
 
-            await _dbConnection.QueryAsync<Order, OrderProduct, Product, Order>(sql, (order, orderProduct, product) =>
+        await _dbConnection.QueryAsync<Order, OrderProduct, Product, Order>(sql, (order, orderProduct, product) =>
+        {
+            if (!lookup.TryGetValue(order.Id, out Order dictOrder))
             {
-                if (!lookup.TryGetValue(order.Id, out Order dictOrder))
-                {
-                    lookup.Add(order.Id, dictOrder = order);                    
-                }
+                lookup.Add(order.Id, dictOrder = order);                    
+            }
 
-                if (orderProduct is not null)
-                {
-                    orderProduct.ProductName = product.Name;
-                    dictOrder.Products.Add(orderProduct);
-                }
+            if (orderProduct is not null)
+            {
+                orderProduct.ProductName = product.Name;
+                dictOrder.Products.Add(orderProduct);
+            }
 
-                return dictOrder;
-            }, parameters, splitOn: "id,name");
+            return dictOrder;
+        }, parameters, splitOn: "id,name");
 
-            return lookup.Values;
-        }
-        catch (Exception e)
-        {
-            return null;
-        }
-    }
+        return lookup.Values;
+     }
 
     public async Task<Order?> GetOrdersById(int orderId)
     {
@@ -259,15 +252,8 @@ public class OrderRepository: IOrderRepository
         parameters.Add("orderId", orderId);
         parameters.Add("orderStatus", orderStatus);
 
-        try
-        {
-            var updatedId = await _dbConnection.QueryFirstOrDefaultAsync<int>(sql, parameters);
+        var updatedId = await _dbConnection.QueryFirstOrDefaultAsync<int>(sql, parameters);
 
-            return updatedId > 0 ? updatedId : -1;
-        }
-        catch (Exception e)
-        {
-            return -1;
-        }
+        return updatedId > 0 ? updatedId : -1;
     }
 }

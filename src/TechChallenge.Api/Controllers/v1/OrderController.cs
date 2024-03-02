@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using TechChallenge.Application.Common.UseCase.Interfaces;
 using TechChallenge.Application.Common.UseCase.Models;
 using TechChallenge.Application.Order.GetOrdersByStatus;
@@ -14,12 +13,15 @@ namespace TechChallenge.Api.Controllers.v1;
 public class OrderController : ControllerBase
 {
     private readonly IOrderService _orderService;
-    private readonly IUseCase<GetOrdersByStatusDAO, UseCaseOutput<IEnumerable<Order>>> _useCase;
+    private readonly IUseCase<GetOrdersByStatusDAO, UseCaseOutput<IEnumerable<Order>>> _getOrdersByStatusUseCase;
 
-    public OrderController(IOrderService orderService, IUseCase<GetOrdersByStatusDAO, UseCaseOutput<IEnumerable<Order>>> useCase)
+    public OrderController(
+        IOrderService orderService,
+        IUseCase<GetOrdersByStatusDAO, UseCaseOutput<IEnumerable<Order>>> getOrdersByStatusUseCase
+    )
     {
         _orderService = orderService;
-        _useCase = useCase;
+        _getOrdersByStatusUseCase = getOrdersByStatusUseCase;
     }
 
     [HttpPatch("Status")]
@@ -35,12 +37,12 @@ public class OrderController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(UseCaseOutput<IEnumerable<Order>>))]
     public async Task<IActionResult> GetOrderByStatus(OrderStatus orderStatus, CancellationToken cancellationToken)
     {
-        var result = await _useCase.Handle(new GetOrdersByStatusDAO(orderStatus), cancellationToken);
+        var result = await _getOrdersByStatusUseCase.Handle(new GetOrdersByStatusDAO(orderStatus), cancellationToken);
 
         if (result.OutputStatus == OutputStatus.Success)
             return Ok(result);
 
-        return StatusCode(StatusCodes.Status500InternalServerError, (object)result);
+        return StatusCode(StatusCodes.Status500InternalServerError, result);
     }
 
     [HttpGet("ById")]

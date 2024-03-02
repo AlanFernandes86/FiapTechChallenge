@@ -15,9 +15,16 @@ namespace TechChallenge.Application.Order.GetOrdersByStatus
 
         public async Task<UseCaseOutput<IEnumerable<Domain.Entities.Order>>> Handle(GetOrdersByStatusDAO input, CancellationToken cancellationToken)
         {
-            var ordersByStatus = await _orderRepository.GetOrdersByStatus(input.OrderStatus);
+            try
+            {
+                var ordersByStatus = await _orderRepository.GetOrdersByStatus(input.OrderStatus);
 
-            return new UseCaseOutput<IEnumerable<Domain.Entities.Order>>(ordersByStatus);
+                return new UseCaseOutput<IEnumerable<Domain.Entities.Order>>(ordersByStatus);
+            }
+            catch (Exception ex)
+            {
+                return new UseCaseOutput<IEnumerable<Domain.Entities.Order>>($"Erro ao consultar pedidos pelo status: [{input.OrderStatus}] - {ex.Message}");
+            }            
         }
     }
 }

@@ -11,7 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="NewFolder\" />
+    <Folder Include="Client\" />
+    <Folder Include="Product\" />
+    <Folder Include="Payment\" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using TechChallenge.Application.Common.UseCase.Interfaces;
+using TechChallenge.Application.Common.UseCase.Models;
+using TechChallenge.Application.Order.GetOrdersByStatus;
 using TechChallenge.Application.Services;
 using TechChallenge.Domain.Ports.Services;
 using TechChallenge.Domain.Repositories;
@@ -14,6 +17,7 @@ public static class DependencyInjection
     {
         services.AddServices();
         services.AddRepositories();
+        services.AddUseCases();
     }
 
     public static void AddServices(this IServiceCollection services)
@@ -32,5 +36,10 @@ public static class DependencyInjection
         services.AddTransient<IOrderRepository, OrderRepository>();
         services.AddTransient<IPaymentRepository, PaymentRepository>();
         services.AddTransient<IProductRepository, ProductRepository>();
+    }
+
+    public static void AddUseCases(this IServiceCollection services)
+    {
+        services.AddTransient<IUseCase<GetOrdersByStatusDAO, UseCaseOutput<IEnumerable<Domain.Entities.Order>>>, GetOrdersByStatusUseCase>();
     }
 }

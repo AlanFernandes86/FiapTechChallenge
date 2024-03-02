@@ -1,6 +1,6 @@
 ﻿using TechChallenge.Domain.Entities;
-using TechChallenge.Domain.Ports.Repositories;
 using TechChallenge.Domain.Ports.Services;
+using TechChallenge.Domain.Repositories;
 
 namespace TechChallenge.Application.Services;
 

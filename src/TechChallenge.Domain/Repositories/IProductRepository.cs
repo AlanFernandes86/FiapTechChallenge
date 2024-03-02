@@ -1,6 +1,6 @@
 ﻿using TechChallenge.Domain.Entities;
 
-namespace TechChallenge.Domain.Ports.Repositories;
+namespace TechChallenge.Domain.Repositories;
 
 public interface IProductRepository
 {

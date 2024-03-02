@@ -1,7 +1,7 @@
 ﻿using TechChallenge.Domain.Entities;
 using TechChallenge.Domain.Enums;
 
-namespace TechChallenge.Domain.Ports.Repositories;
+namespace TechChallenge.Domain.Repositories;
 
 public interface IOrderRepository
 {

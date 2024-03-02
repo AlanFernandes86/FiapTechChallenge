@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using TechChallenge.Application.Services;
-using TechChallenge.Domain.Ports.Repositories;
 using TechChallenge.Domain.Ports.Services;
+using TechChallenge.Domain.Repositories;
 using TechChallenge.Infra.Context;
 using TechChallenge.Infra.Provider;
 using TechChallenge.Infra.Repositories;

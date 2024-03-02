@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using System.Data;
 using TechChallenge.Domain.Entities;
-using TechChallenge.Domain.Ports.Repositories;
+using TechChallenge.Domain.Repositories;
 using TechChallenge.Infra.Provider;
 
 namespace TechChallenge.Infra.Repositories;

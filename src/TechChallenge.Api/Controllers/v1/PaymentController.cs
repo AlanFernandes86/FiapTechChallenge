@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using TechChallenge.Application.Common.UseCase.Extensions;
 using TechChallenge.Application.Common.UseCase.Interfaces;
 using TechChallenge.Application.Common.UseCase.Models;
 using TechChallenge.Application.Order.SetPayment;
@@ -21,11 +22,8 @@ public class PaymentController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(UseCaseOutput<int>))]
     public async Task<IActionResult> SetPayment(SetPaymentDAO setPaymentDAO)
     {
-        var result = await _setPaymentUseCase.Handle(setPaymentDAO);
+        var output = await _setPaymentUseCase.Handle(setPaymentDAO);
 
-        if (result.OutputStatus == OutputStatus.Success)
-            return Ok(result);
-
-        return StatusCode(StatusCodes.Status500InternalServerError, result);
+        return output.ToResult(this);
     }
 }

@@ -19,6 +19,11 @@ namespace TechChallenge.Application.Order.GetOrdersById
             {
                 var order = await _orderRepository.GetOrdersById(input.OrderId);
 
+                if (order == null)
+                {
+                    return new UseCaseOutput<Domain.Entities.Order>(new Validation("ORDER_NOT_FOUND", $"pedido id: [{input.OrderId}] - não encontrado"));
+                }
+
                 return new UseCaseOutput<Domain.Entities.Order>(order);
             }
             catch (Exception ex)

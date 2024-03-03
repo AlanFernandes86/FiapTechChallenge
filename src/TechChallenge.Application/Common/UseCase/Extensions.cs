@@ -14,6 +14,11 @@ namespace TechChallenge.Application.Common.UseCase.Extensions
                 return controller.Ok(useCaseOutput);
             }
 
+            if (useCaseOutput.OutputStatus == OutputStatus.Validation)
+            {
+                return controller.BadRequest(useCaseOutput);
+            }
+
             return controller.StatusCode(StatusCodes.Status500InternalServerError, useCaseOutput);
         }
     }

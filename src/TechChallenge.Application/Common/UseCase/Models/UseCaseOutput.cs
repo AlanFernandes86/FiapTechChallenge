@@ -8,7 +8,9 @@ namespace TechChallenge.Application.Common.UseCase.Models
 
         public T? Data { get; }
 
-        public string? ErrorMessage { get; }
+        public string? Error { get; }
+
+        public Validation? Validation { get; }
 
         public UseCaseOutput(T data)
         {
@@ -19,7 +21,13 @@ namespace TechChallenge.Application.Common.UseCase.Models
         public UseCaseOutput(string? errorMessage)
         {
             OutputStatus = OutputStatus.Error;
-            ErrorMessage = errorMessage;
+            Error = errorMessage;
+        }
+
+        public UseCaseOutput(Validation? validationMessage)
+        {
+            OutputStatus = OutputStatus.Validation;
+            Validation = validationMessage;
         }
     }
 }

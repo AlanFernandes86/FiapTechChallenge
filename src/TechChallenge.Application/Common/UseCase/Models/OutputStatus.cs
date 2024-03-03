@@ -3,5 +3,6 @@
 public enum OutputStatus
 {
     Success,
+    Validation,
     Error
 }

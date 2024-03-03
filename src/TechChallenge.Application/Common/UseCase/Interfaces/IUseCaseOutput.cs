@@ -6,5 +6,8 @@ public interface IUseCaseOutput<T>
 {
     public OutputStatus OutputStatus { get; }
     public T? Data { get; }
-    public string? ErrorMessage { get; }
+    public string? Error { get; }
+    public Validation? Validation { get; }
 }
+
+

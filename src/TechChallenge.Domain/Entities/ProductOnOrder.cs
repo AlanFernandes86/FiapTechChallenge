@@ -1,6 +1,6 @@
 ﻿namespace TechChallenge.Domain.Entities;
 
-public class OrderProduct
+public class ProductOnOrder
 {
     public int? Id { get; set; }
     public int ProductId { get; set; }

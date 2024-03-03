@@ -17,9 +17,14 @@ namespace TechChallenge.Application.Order.UpdateOrderStatus
         {
             try
             {
-                var ordersByStatus = await _orderRepository.UpdateOrderStatus(input.OrderId, input.OrderStatus);
+                var orderId = await _orderRepository.UpdateOrderStatus(input.OrderId, input.OrderStatus);
 
-                return new UseCaseOutput<int>(ordersByStatus);
+                if (orderId == -1)
+                {
+                    return new UseCaseOutput<int>(new Validation("ORDER_NOT_FOUND", $"pedido id: [{input.OrderId}] - não encontrado"));
+                }
+
+                return new UseCaseOutput<int>(orderId);
             }
             catch (Exception)
             {

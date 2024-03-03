@@ -41,7 +41,7 @@ public class OrderRepository: IOrderRepository
 
         var lookup = new Dictionary<int?, Order>();
 
-        await _dbConnection.QueryAsync<Order, OrderProduct, Product, Order>(sql, (order, orderProduct, product) =>
+        await _dbConnection.QueryAsync<Order, ProductOnOrder, Product, Order>(sql, (order, orderProduct, product) =>
         {
             if (!lookup.TryGetValue(order.Id, out Order dictOrder))
             {
@@ -51,7 +51,7 @@ public class OrderRepository: IOrderRepository
             if (orderProduct is not null)
             {
                 orderProduct.ProductName = product.Name;
-                dictOrder.Products.Add(orderProduct);
+                dictOrder.ProductsOnOrder.Add(orderProduct);
             }
 
             return dictOrder;
@@ -84,7 +84,7 @@ public class OrderRepository: IOrderRepository
 
         Order? lookup = null;
 
-        await _dbConnection.QueryAsync<Order, OrderProduct, Product, Order>(sql, (order, orderProduct, product) =>
+        await _dbConnection.QueryAsync<Order, ProductOnOrder, Product, Order>(sql, (order, orderProduct, product) =>
         {
             if (lookup is null)
             {
@@ -94,7 +94,7 @@ public class OrderRepository: IOrderRepository
             if (orderProduct is not null)
             {
                 orderProduct.ProductName = product.Name;
-                lookup.Products.Add(orderProduct);
+                lookup.ProductsOnOrder.Add(orderProduct);
             }
 
             return order;
@@ -129,7 +129,7 @@ public class OrderRepository: IOrderRepository
 
             var orderId = await _dbConnection.QueryFirstOrDefaultAsync<int>(sql, parameters);
 
-            foreach (var orderProduct in order.Products)
+            foreach (var orderProduct in order.ProductsOnOrder)
             {
                 await PutProductToOrder(orderProduct, orderId);
             }
@@ -140,13 +140,13 @@ public class OrderRepository: IOrderRepository
         }
     }
 
-    public async Task<int> PutProductToOrder(OrderProduct orderProduct, int orderId)
+    public async Task<int> PutProductToOrder(ProductOnOrder orderProduct, int orderId)
     {
         var sql = @"MERGE INTO [dbo].[order_product] AS target
                     USING (
                     VALUES
-                        (@id
-                        ,@productId
+                        (
+                         @productId
                         ,@orderId
                         ,@quantity
                         ,@price
@@ -154,14 +154,14 @@ public class OrderRepository: IOrderRepository
                         ,GETDATE()
                         )
                     ) AS source 
-                        ([id]
-                       ,[product_id]
+                        (
+                        [product_id]
                        ,[order_id]
                        ,[quantity]
                        ,[price] 
                        ,[updated_at]
                        ,[created_at])
-                    ON target.[id] = source.[id]
+                    ON target.[product_id] = source.[product_id] AND target.[order_id] = source.[order_id]
                     WHEN MATCHED THEN
                         UPDATE SET
                         target.[quantity] = source.[quantity],
@@ -187,7 +187,6 @@ public class OrderRepository: IOrderRepository
                         OUTPUT INSERTED.id;";
 
         var parameters = new DynamicParameters();
-        parameters.Add("id", orderProduct.Id);
         parameters.Add("productId", orderProduct.ProductId);
         parameters.Add("orderId", orderId);
         parameters.Add("quantity", orderProduct.Quantity);

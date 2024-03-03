@@ -23,7 +23,7 @@ namespace TechChallenge.Application.Order.CreateOrder
                 {
                     StatusId = OrderStatus.CREATED,
                     ClientCpf = input.ClientCpf,
-                    Products = input.Products.Select(x => new OrderProduct
+                    ProductsOnOrder = input.Products.Select(x => new ProductOnOrder
                     {
                         ProductId = x.ProductId,
                         Price = x.Price,

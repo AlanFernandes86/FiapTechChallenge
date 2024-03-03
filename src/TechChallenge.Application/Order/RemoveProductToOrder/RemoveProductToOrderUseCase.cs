@@ -17,9 +17,14 @@ namespace TechChallenge.Application.Order.RemoveProductToOrder
         {
             try
             {
-                var ordersByStatus = await _orderRepository.RemoveProductToOrder(input.OrderProductId);
+                var orderProductId = await _orderRepository.RemoveProductToOrder(input.OrderProductId);
 
-                return new UseCaseOutput<int>(ordersByStatus);
+                if (orderProductId == -1)
+                {
+                    return new UseCaseOutput<int>(new Validation("PRODUCT_ON_ORDER_NOT_FOUND", $"produto no pedido id: [{input.OrderProductId}] - não encontrado ou já removido"));
+                }
+
+                return new UseCaseOutput<int>(orderProductId);
             }
             catch (Exception ex)
             {

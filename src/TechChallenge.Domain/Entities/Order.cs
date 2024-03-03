@@ -10,12 +10,12 @@ public class Order
 
     public long ClientCpf { get; set; }
 
-    public List<OrderProduct> Products { get; set; }    
+    public List<ProductOnOrder> ProductsOnOrder { get; set; }    
 
     public Order()
     {
-        Products = new List<OrderProduct>();
+        ProductsOnOrder = new List<ProductOnOrder>();
     }
 
-    public float Total => Products.Sum(x => x.Quantity * x.Price);
+    public float Total => ProductsOnOrder.Sum(x => x.Quantity * x.Price);
 }

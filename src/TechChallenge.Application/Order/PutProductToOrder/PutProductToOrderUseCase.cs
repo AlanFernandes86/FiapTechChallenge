@@ -17,7 +17,7 @@ namespace TechChallenge.Application.Order.PutProductToOrder
         {
             try
             {
-                var orderProduct = new Domain.Entities.OrderProduct
+                var orderProduct = new Domain.Entities.ProductOnOrder
                 {
                     ProductId = input.ProductId,
                     Price = input.Price,

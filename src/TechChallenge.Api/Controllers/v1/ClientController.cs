@@ -24,7 +24,7 @@ public class ClientController : ControllerBase
         _putClientUseCase = putClientUseCase;
     }
 
-    [HttpGet]
+    [HttpGet("{cpf}")]
     public async Task<IActionResult> GetClient(long cpf)
     {
         var output = await _getClientUseCase.Handle(new GetClientDAO(cpf));

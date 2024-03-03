@@ -83,10 +83,10 @@ public class OrderController : ControllerBase
         return output.ToActionResult(this);
     }
 
-    [HttpDelete("Product/{orderProductId}")]
-    public async Task<IActionResult> RemoveProductToOrder(int orderProductId)
+    [HttpDelete("Product/{productOnOrderId}")]
+    public async Task<IActionResult> RemoveProductToOrder(int productOnOrderId)
     {
-        var output = await _removeProductToOrderUseCase.Handle(new RemoveProductToOrderDAO(orderProductId));
+        var output = await _removeProductToOrderUseCase.Handle(new RemoveProductToOrderDAO(productOnOrderId));
 
         return output.ToActionResult(this);
     }

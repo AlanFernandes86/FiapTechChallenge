@@ -5,10 +5,10 @@ namespace TechChallenge.Application.Order.RemoveProductToOrder;
 
 public class RemoveProductToOrderDAO: IUseCaseDAO
 {
-    public readonly OrderStatus OrderStatus;
+    public readonly int OrderProductId;
 
-    public RemoveProductToOrderDAO(OrderStatus orderStatus)
+    public RemoveProductToOrderDAO(int orderProductId)
     {
-        OrderStatus = orderStatus;
+        OrderProductId = orderProductId;
     }
 }

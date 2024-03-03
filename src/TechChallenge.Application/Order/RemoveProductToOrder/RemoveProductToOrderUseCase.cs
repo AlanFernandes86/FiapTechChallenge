@@ -4,7 +4,7 @@ using TechChallenge.Domain.Repositories;
 
 namespace TechChallenge.Application.Order.RemoveProductToOrder
 {
-    public class RemoveProductToOrderUseCase : IUseCase<RemoveProductToOrderDAO, UseCaseOutput<IEnumerable<Domain.Entities.Order>>>
+    public class RemoveProductToOrderUseCase : IUseCase<RemoveProductToOrderDAO, UseCaseOutput<int>>
     {
         private readonly IOrderRepository _orderRepository;
 
@@ -13,11 +13,18 @@ namespace TechChallenge.Application.Order.RemoveProductToOrder
             _orderRepository = orderRepository;
         }
 
-        public async Task<UseCaseOutput<IEnumerable<Domain.Entities.Order>>> Handle(RemoveProductToOrderDAO input)
+        public async Task<UseCaseOutput<int>> Handle(RemoveProductToOrderDAO input)
         {
-            var ordersByStatus = await _orderRepository.GetOrdersByStatus(input.OrderStatus);
+            try
+            {
+                var ordersByStatus = await _orderRepository.RemoveProductToOrder(input.OrderProductId);
 
-            return new UseCaseOutput<IEnumerable<Domain.Entities.Order>>(ordersByStatus);
+                return new UseCaseOutput<int>(ordersByStatus);
+            }
+            catch (Exception ex)
+            {
+                return new UseCaseOutput<int>($"Erro ao remover produto do pedido - {ex.Message}");
+            }
         }
     }
 }

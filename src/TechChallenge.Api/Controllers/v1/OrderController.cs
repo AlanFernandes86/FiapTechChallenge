@@ -6,6 +6,7 @@ using TechChallenge.Application.Order.CreateOrder;
 using TechChallenge.Application.Order.GetOrdersById;
 using TechChallenge.Application.Order.GetOrdersByStatus;
 using TechChallenge.Application.Order.PutProductToOrder;
+using TechChallenge.Application.Order.RemoveProductToOrder;
 using TechChallenge.Application.Order.UpdateOrderStatus;
 using TechChallenge.Domain.Entities;
 using TechChallenge.Domain.Enums;
@@ -23,6 +24,7 @@ public class OrderController : ControllerBase
     private readonly IUseCase<UpdateOrderStatusDAO, UseCaseOutput<int>> _updateOrderStatusUseCase;
     private readonly IUseCase<CreateOrderDAO, UseCaseOutput<int>> _createOrderUseCase;
     private readonly IUseCase<PutProductToOrderDAO, UseCaseOutput<int>> _putProductToOrderUseCase;
+    private readonly IUseCase<RemoveProductToOrderDAO, UseCaseOutput<int>> _removeProductToOrderUseCase;
 
     public OrderController(
         IOrderService orderService,
@@ -30,7 +32,8 @@ public class OrderController : ControllerBase
         IUseCase<GetOrderByIdDAO, UseCaseOutput<Order>> getOrderByIdUseCase,
         IUseCase<UpdateOrderStatusDAO, UseCaseOutput<int>> updateOrderStatusUseCase,
         IUseCase<CreateOrderDAO, UseCaseOutput<int>> createOrderUseCase,
-        IUseCase<PutProductToOrderDAO, UseCaseOutput<int>> putProductToOrderUseCase
+        IUseCase<PutProductToOrderDAO, UseCaseOutput<int>> putProductToOrderUseCase,
+        IUseCase<RemoveProductToOrderDAO, UseCaseOutput<int>> removeProductToOrderUseCase
     )
     {
         _orderService = orderService;
@@ -39,6 +42,7 @@ public class OrderController : ControllerBase
         _updateOrderStatusUseCase = updateOrderStatusUseCase;
         _createOrderUseCase = createOrderUseCase;
         _putProductToOrderUseCase = putProductToOrderUseCase;
+        _removeProductToOrderUseCase = removeProductToOrderUseCase;
     }
 
     [HttpPatch("Status/{orderId}")]
@@ -86,8 +90,8 @@ public class OrderController : ControllerBase
     [HttpDelete("Product/{orderProductId}")]
     public async Task<IActionResult> RemoveProductToOrder(int orderProductId)
     {
-        var result = await _orderService.RemoveProductToOrder(orderProductId);
+        var output = await _removeProductToOrderUseCase.Handle(new RemoveProductToOrderDAO(orderProductId));
 
-        return result != -1 ? Ok(new { id = result }) : BadRequest();
+        return output.ToResult(this);
     }
 }

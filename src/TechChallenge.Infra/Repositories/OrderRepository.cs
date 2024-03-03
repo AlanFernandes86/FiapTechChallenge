@@ -201,16 +201,9 @@ public class OrderRepository: IOrderRepository
         var parameters = new DynamicParameters();
         parameters.Add("orderProductId", orderProductId);
 
-        try
-        {
-            var orderId = await _dbConnection.QueryFirstOrDefaultAsync<int>(sql, parameters);
+        var orderId = await _dbConnection.QueryFirstOrDefaultAsync<int>(sql, parameters);
 
-            return orderId > 0 ? orderId : -1;
-        }
-        catch (Exception e)
-        {
-            return -1;
-        }
+        return orderId > 0 ? orderId : -1;
     }
 
     public async Task<int> UpdateOrderStatus(int orderId, OrderStatus orderStatus)

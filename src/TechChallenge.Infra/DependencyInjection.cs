@@ -7,6 +7,7 @@ using TechChallenge.Application.Order.GetOrdersById;
 using TechChallenge.Application.Order.GetOrdersByStatus;
 using TechChallenge.Application.Order.PutClient;
 using TechChallenge.Application.Order.PutProductToOrder;
+using TechChallenge.Application.Order.RemoveProductToOrder;
 using TechChallenge.Application.Order.SetPayment;
 using TechChallenge.Application.Order.UpdateOrderStatus;
 using TechChallenge.Application.Services;
@@ -56,6 +57,7 @@ public static class DependencyInjection
         services.AddTransient<IUseCase<UpdateOrderStatusDAO, UseCaseOutput<int>>,  UpdateOrderStatusUseCase>();
         services.AddTransient<IUseCase<CreateOrderDAO, UseCaseOutput<int>>,  CreateOrderUseCase>();
         services.AddTransient<IUseCase<PutProductToOrderDAO, UseCaseOutput<int>>,  PutProductToOrderUseCase>();
+        services.AddTransient<IUseCase<RemoveProductToOrderDAO, UseCaseOutput<int>>,  RemoveProductToOrderUseCase>();
 
         services.AddTransient<IUseCase<SetPaymentDAO, UseCaseOutput<int>>,  SetPaymentUseCase>();
     }

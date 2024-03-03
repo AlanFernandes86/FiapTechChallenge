@@ -31,7 +31,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddPortsAndAdapters();
+builder.Services.AddGatewaysAndUseCases();
 
 builder.Services.AddApiVersioning(config =>
 {

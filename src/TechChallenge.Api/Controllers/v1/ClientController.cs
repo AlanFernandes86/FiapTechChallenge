@@ -29,7 +29,7 @@ public class ClientController : ControllerBase
     {
         var output = await _getClientUseCase.Handle(new GetClientDAO(cpf));
 
-        return output.ToResult(this);
+        return output.ToActionResult(this);
     }
 
     [HttpPut]
@@ -37,6 +37,6 @@ public class ClientController : ControllerBase
     {
         var output = await _putClientUseCase.Handle(putClientDAO);
 
-        return output.ToResult(this);
+        return output.ToActionResult(this);
     }
 }

@@ -24,6 +24,6 @@ public class PaymentController : ControllerBase
     {
         var output = await _setPaymentUseCase.Handle(setPaymentDAO);
 
-        return output.ToResult(this);
+        return output.ToActionResult(this);
     }
 }

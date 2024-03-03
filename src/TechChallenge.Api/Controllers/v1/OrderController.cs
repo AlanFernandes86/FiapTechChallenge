@@ -46,7 +46,7 @@ public class OrderController : ControllerBase
     {
         var output = await _updateOrderStatusUseCase.Handle(new UpdateOrderStatusDAO(orderId, orderStatus));
 
-        return output.ToResult(this);
+        return output.ToActionResult(this);
     }
 
     [HttpGet("Status/{orderStatus}")]
@@ -56,7 +56,7 @@ public class OrderController : ControllerBase
     {
         var output = await _getOrdersByStatusUseCase.Handle(new GetOrdersByStatusDAO(orderStatus));
 
-        return output.ToResult(this);
+        return output.ToActionResult(this);
     }
 
     [HttpGet("{orderId}")]
@@ -64,7 +64,7 @@ public class OrderController : ControllerBase
     {
         var output = await _getOrderByIdUseCase.Handle(new GetOrderByIdDAO(orderId));
 
-        return output.ToResult(this);
+        return output.ToActionResult(this);
     }
 
     [HttpPost]
@@ -72,7 +72,7 @@ public class OrderController : ControllerBase
     {
         var output = await _createOrderUseCase.Handle(createOrderDAO);
 
-        return output.ToResult(this);
+        return output.ToActionResult(this);
     }
 
     [HttpPut("Product")]
@@ -80,7 +80,7 @@ public class OrderController : ControllerBase
     {
         var output = await _putProductToOrderUseCase.Handle(putProductToOrder);
 
-        return output.ToResult(this);
+        return output.ToActionResult(this);
     }
 
     [HttpDelete("Product/{orderProductId}")]
@@ -88,6 +88,6 @@ public class OrderController : ControllerBase
     {
         var output = await _removeProductToOrderUseCase.Handle(new RemoveProductToOrderDAO(orderProductId));
 
-        return output.ToResult(this);
+        return output.ToActionResult(this);
     }
 }

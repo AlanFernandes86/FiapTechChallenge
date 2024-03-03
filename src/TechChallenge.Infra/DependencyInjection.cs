@@ -24,7 +24,7 @@ namespace TechChallenge.Infra;
 
 public static class DependencyInjection
 {
-    public static void AddPortsAndAdapters(this IServiceCollection services)
+    public static void AddGatewaysAndUseCases(this IServiceCollection services)
     {
         services.AddRepositories();
         services.AddUseCases();

@@ -7,7 +7,7 @@ namespace TechChallenge.Application.Common.UseCase.Extensions
 {
     public static class Extensions
     {
-        public static IActionResult ToResult<T>(this IUseCaseOutput<T> useCaseOutput, ControllerBase controller)
+        public static IActionResult ToActionResult<T>(this IUseCaseOutput<T> useCaseOutput, ControllerBase controller)
         {
             if (useCaseOutput.OutputStatus == OutputStatus.Success)
             {

@@ -37,7 +37,7 @@ public class ProductController : ControllerBase
     {
         var output = await _getProductsByCategoryUseCase.Handle(new GetProductsByCategoryDAO(categoryId));
 
-        return output.ToResult(this);
+        return output.ToActionResult(this);
     }
 
     [HttpPut]
@@ -45,7 +45,7 @@ public class ProductController : ControllerBase
     {
         var output = await _putProductUseCase.Handle(putProductDAO);
 
-        return output.ToResult(this);
+        return output.ToActionResult(this);
     }
 
     [HttpGet("Categories")]
@@ -53,7 +53,7 @@ public class ProductController : ControllerBase
     {
         var output = await _getProductCategoriesUseCase.Handle(new GetProductCategoriesDAO());
 
-        return output.ToResult(this);
+        return output.ToActionResult(this);
     }
 
     [HttpPut("Category")]
@@ -61,6 +61,6 @@ public class ProductController : ControllerBase
     {
         var output = await _putProductCategoryUseCase.Handle(putProductCategoryDAO);
 
-        return output.ToResult(this);
+        return output.ToActionResult(this);
     }
 }

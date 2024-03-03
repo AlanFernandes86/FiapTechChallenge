@@ -19,9 +19,9 @@ public class PaymentController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UseCaseOutput<int>))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(UseCaseOutput<int>))]
-    public async Task<IActionResult> SetPayment(SetPaymentDAO setPaymentDAO, CancellationToken cancellationToken)
+    public async Task<IActionResult> SetPayment(SetPaymentDAO setPaymentDAO)
     {
-        var result = await _setPaymentUseCase.Handle(setPaymentDAO, cancellationToken);
+        var result = await _setPaymentUseCase.Handle(setPaymentDAO);
 
         if (result.OutputStatus == OutputStatus.Success)
             return Ok(result);

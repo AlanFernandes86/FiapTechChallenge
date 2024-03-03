@@ -13,7 +13,7 @@ namespace TechChallenge.Application.Order.PutClient
             _clientRepository = clientRepository;
         }
 
-        public async Task<UseCaseOutput<bool>> Handle(PutClientDAO input, CancellationToken cancellationToken)
+        public async Task<UseCaseOutput<bool>> Handle(PutClientDAO input)
         {
             try
             {

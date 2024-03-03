@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Threading;
 using TechChallenge.Application.Common.UseCase.Interfaces;
 using TechChallenge.Application.Common.UseCase.Models;
+using TechChallenge.Application.Order.GetOrdersById;
 using TechChallenge.Application.Order.GetOrdersByStatus;
 using TechChallenge.Domain.Entities;
 using TechChallenge.Domain.Enums;
@@ -14,14 +16,17 @@ public class OrderController : ControllerBase
 {
     private readonly IOrderService _orderService;
     private readonly IUseCase<GetOrdersByStatusDAO, UseCaseOutput<IEnumerable<Order>>> _getOrdersByStatusUseCase;
+    private readonly IUseCase<GetOrderByIdDAO, UseCaseOutput<Order>> _getOrderByIdUseCase;
 
     public OrderController(
         IOrderService orderService,
-        IUseCase<GetOrdersByStatusDAO, UseCaseOutput<IEnumerable<Order>>> getOrdersByStatusUseCase
+        IUseCase<GetOrdersByStatusDAO, UseCaseOutput<IEnumerable<Order>>> getOrdersByStatusUseCase,
+        IUseCase<GetOrderByIdDAO, UseCaseOutput<Order>> getOrderByIdUseCase
     )
     {
         _orderService = orderService;
         _getOrdersByStatusUseCase = getOrdersByStatusUseCase;
+        _getOrderByIdUseCase = getOrderByIdUseCase;
     }
 
     [HttpPatch("Status")]
@@ -35,9 +40,9 @@ public class OrderController : ControllerBase
     [HttpGet("ByStatus")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UseCaseOutput<IEnumerable<Order>>))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(UseCaseOutput<IEnumerable<Order>>))]
-    public async Task<IActionResult> GetOrderByStatus(OrderStatus orderStatus, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetOrderByStatus(OrderStatus orderStatus)
     {
-        var result = await _getOrdersByStatusUseCase.Handle(new GetOrdersByStatusDAO(orderStatus), cancellationToken);
+        var result = await _getOrdersByStatusUseCase.Handle(new GetOrdersByStatusDAO(orderStatus));
 
         if (result.OutputStatus == OutputStatus.Success)
             return Ok(result);
@@ -45,12 +50,15 @@ public class OrderController : ControllerBase
         return StatusCode(StatusCodes.Status500InternalServerError, result);
     }
 
-    [HttpGet("ById")]
+    [HttpGet("{orderId}")]
     public async Task<IActionResult> GetOrderById(int orderId)
     {
-        var result = await _orderService.GetOrdersById(orderId);
+        var result = await _getOrderByIdUseCase.Handle(new GetOrderByIdDAO(orderId));
 
-        return result is not null ? Ok(result) : NotFound();
+        if (result.OutputStatus == OutputStatus.Success)
+            return Ok(result);
+
+        return StatusCode(StatusCodes.Status500InternalServerError, result);
     }
 
     [HttpPost]

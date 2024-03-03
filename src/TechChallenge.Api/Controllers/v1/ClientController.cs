@@ -24,9 +24,9 @@ public class ClientController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetClient(long cpf, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetClient(long cpf)
     {
-        var result = await _getClientUseCase.Handle(new GetClientDAO(cpf), cancellationToken);
+        var result = await _getClientUseCase.Handle(new GetClientDAO(cpf));
 
         if (result.OutputStatus == OutputStatus.Success)
             return Ok(result);
@@ -35,9 +35,9 @@ public class ClientController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> PutClient(PutClientDAO putClientDAO, CancellationToken cancellationToken)
+    public async Task<IActionResult> PutClient(PutClientDAO putClientDAO)
     {
-        var result = await _putClientUseCase.Handle(putClientDAO, cancellationToken);
+        var result = await _putClientUseCase.Handle(putClientDAO);
 
         if (result.OutputStatus == OutputStatus.Success)
             return Ok(result);

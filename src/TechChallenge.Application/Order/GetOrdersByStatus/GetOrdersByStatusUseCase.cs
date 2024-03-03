@@ -13,7 +13,7 @@ namespace TechChallenge.Application.Order.GetOrdersByStatus
             _orderRepository = orderRepository;
         }
 
-        public async Task<UseCaseOutput<IEnumerable<Domain.Entities.Order>>> Handle(GetOrdersByStatusDAO input, CancellationToken cancellationToken)
+        public async Task<UseCaseOutput<IEnumerable<Domain.Entities.Order>>> Handle(GetOrdersByStatusDAO input)
         {
             try
             {

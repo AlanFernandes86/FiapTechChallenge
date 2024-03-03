@@ -16,7 +16,7 @@ public class OrderService : IOrderService
 
     public async Task<IEnumerable<Domain.Entities.Order>> GetOrderByStatus(OrderStatus orderStatus) => await _orderRepository.GetOrdersByStatus(orderStatus);
 
-    public async Task<int> CreateOrder(Domain.Entities.Order order) => await _orderRepository.CreateOrder(order);    
+    public async Task<int> CreateOrder(Domain.Entities.Order order) => await _orderRepository.CreateOrder(order);
 
     public async Task<int> PutProductToOrder(OrderProduct orderProduct, int orderId) => await _orderRepository.PutProductToOrder(orderProduct, orderId);
 

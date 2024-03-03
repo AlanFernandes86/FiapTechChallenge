@@ -13,7 +13,7 @@ namespace TechChallenge.Application.Order.GetClient
             _clientRepository = clientRepository;
         }
 
-        public async Task<UseCaseOutput<Domain.Entities.Client>> Handle(GetClientDAO input, CancellationToken cancellationToken)
+        public async Task<UseCaseOutput<Domain.Entities.Client>> Handle(GetClientDAO input)
         {
             try
             {

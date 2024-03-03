@@ -19,7 +19,7 @@ namespace TechChallenge.Application.Order.SetPayment
             _paymentRepository = paymentRepository;
         }
 
-        public async Task<UseCaseOutput<int>> Handle(SetPaymentDAO input, CancellationToken cancellationToken)
+        public async Task<UseCaseOutput<int>> Handle(SetPaymentDAO input)
         {
             try
             {

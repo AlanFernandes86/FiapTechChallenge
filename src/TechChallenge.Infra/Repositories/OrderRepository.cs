@@ -82,32 +82,19 @@ public class OrderRepository: IOrderRepository
         var parameters = new DynamicParameters();
         parameters.Add("orderId", orderId);
 
-        try
+        Order result = (await _dbConnection.QueryAsync<Order, OrderProduct, Product, Order>(sql, (order, orderProduct, product) =>
         {
-            Order? result = null;
 
-            await _dbConnection.QueryAsync<Order, OrderProduct, Product, Order>(sql, (order, orderProduct, product) =>
+            if (orderProduct is not null)
             {
-                if (result == null)
-                {
-                    result = order;
-                }
+                orderProduct.ProductName = product.Name;
+                order.Products.Add(orderProduct);
+            }
 
-                if (orderProduct is not null)
-                {
-                    orderProduct.ProductName = product.Name;
-                    result.Products.Add(orderProduct);
-                }
+            return order;
+        }, parameters, splitOn: "id,name")).First();
 
-                return order;
-            }, parameters, splitOn: "id,name");
-
-            return result;
-        }
-        catch (Exception e)
-        {
-            return null;
-        }
+        return result;
     }
 
     public async Task<int> CreateOrder(Order order)

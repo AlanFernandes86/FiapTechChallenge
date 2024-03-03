@@ -2,5 +2,5 @@
 
 public interface IUseCase<IUseCaseDAO, IUseCaseOutput>
 {
-    Task<IUseCaseOutput> Handle(IUseCaseDAO useCaseDAO, CancellationToken cancellationToken);
+    Task<IUseCaseOutput> Handle(IUseCaseDAO useCaseDAO);
 }

@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using TechChallenge.Application.Common.UseCase.Interfaces;
 using TechChallenge.Application.Common.UseCase.Models;
+using TechChallenge.Application.Order.GetClient;
 using TechChallenge.Application.Order.GetOrdersByStatus;
+using TechChallenge.Application.Order.PutClient;
 using TechChallenge.Application.Order.SetPayment;
 using TechChallenge.Application.Services;
+using TechChallenge.Domain.Entities;
 using TechChallenge.Domain.Ports.Services;
 using TechChallenge.Domain.Repositories;
 using TechChallenge.Infra.Context;
@@ -41,7 +44,12 @@ public static class DependencyInjection
 
     public static void AddUseCases(this IServiceCollection services)
     {
-        services.AddTransient<IUseCase<GetOrdersByStatusDAO, UseCaseOutput<IEnumerable<Domain.Entities.Order>>>, GetOrdersByStatusUseCase>();
+        services.AddTransient<IUseCase<GetClientDAO, UseCaseOutput<Client>>, GetClientUseCase>();
+        services.AddTransient<IUseCase<PutClientDAO, UseCaseOutput<bool>>,  PutClientUseCase>();
+
+        services.AddTransient<IUseCase<GetOrdersByStatusDAO, UseCaseOutput<IEnumerable<Order>>>, GetOrdersByStatusUseCase>();
+
         services.AddTransient<IUseCase<SetPaymentDAO, UseCaseOutput<int>>,  SetPaymentUseCase>();
     }
+
 }

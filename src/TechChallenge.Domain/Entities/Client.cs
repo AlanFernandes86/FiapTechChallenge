@@ -6,7 +6,7 @@ public class Client
     public string Name { get; set; }
     public string Email { get; set; }
 
-    public Client(int cpf, string name, string email)
+    public Client(long cpf, string name, string email)
     {
         Cpf = cpf;
         Name = name;

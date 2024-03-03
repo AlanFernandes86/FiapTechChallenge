@@ -4,20 +4,30 @@ using TechChallenge.Domain.Repositories;
 
 namespace TechChallenge.Application.Order.PutClient
 {
-    public class PutClientUseCase : IUseCase<PutClientDAO, UseCaseOutput<IEnumerable<Domain.Entities.Order>>>
+    public class PutClientUseCase : IUseCase<PutClientDAO, UseCaseOutput<bool>>
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IClientRepository _clientRepository;
 
-        public PutClientUseCase(IOrderRepository orderRepository)
+        public PutClientUseCase(IClientRepository clientRepository)
         {
-            _orderRepository = orderRepository;
+            _clientRepository = clientRepository;
         }
 
-        public async Task<UseCaseOutput<IEnumerable<Domain.Entities.Order>>> Handle(PutClientDAO input, CancellationToken cancellationToken)
+        public async Task<UseCaseOutput<bool>> Handle(PutClientDAO input, CancellationToken cancellationToken)
         {
-            var ordersByStatus = await _orderRepository.GetOrdersByStatus(input.OrderStatus);
+            try
+            {
+                var client = new Domain.Entities.Client(input.Cpf, input.Name, input.Email);
 
-            return new UseCaseOutput<IEnumerable<Domain.Entities.Order>>(ordersByStatus);
+                var ordersByStatus = await _clientRepository.PutClient(client);
+
+                return new UseCaseOutput<bool>(ordersByStatus);
+            }
+            catch (Exception ex)
+            {
+                return new UseCaseOutput<bool>($"Erro ao cadastrar ou atualizar cliente na base de dados - {ex.Message}");
+            }
+            
         }
     }
 }

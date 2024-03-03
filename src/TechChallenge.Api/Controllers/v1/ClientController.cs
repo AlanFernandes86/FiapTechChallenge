@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using TechChallenge.Application.Common.UseCase.Interfaces;
+using TechChallenge.Application.Common.UseCase.Models;
+using TechChallenge.Application.Order.GetClient;
+using TechChallenge.Application.Order.PutClient;
 using TechChallenge.Domain.Entities;
-using TechChallenge.Domain.Ports.Services;
 
 namespace TechChallenge.Api.Controllers.v1;
 
@@ -8,26 +11,37 @@ namespace TechChallenge.Api.Controllers.v1;
 [Route("api/v1/[controller]")]
 public class ClientController : ControllerBase
 {
-    private readonly IClientService _clientService;
+    private readonly IUseCase<GetClientDAO, UseCaseOutput<Client>> _getClientUseCase;
+    private readonly IUseCase<PutClientDAO, UseCaseOutput<bool>> _putClientUseCase;
 
-    public ClientController(IClientService clientService)
+    public ClientController(
+        IUseCase<GetClientDAO, UseCaseOutput<Client>> getClientUseCase,
+        IUseCase<PutClientDAO, UseCaseOutput<bool>> putClientUseCase
+    )
     {
-        _clientService = clientService;
+        _getClientUseCase = getClientUseCase;
+        _putClientUseCase = putClientUseCase;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetClient(long cpf)
+    public async Task<IActionResult> GetClient(long cpf, CancellationToken cancellationToken)
     {
-        var result = await _clientService.GetClient(cpf);
+        var result = await _getClientUseCase.Handle(new GetClientDAO(cpf), cancellationToken);
 
-        return result is not null ? Ok(result) : NotFound();
+        if (result.OutputStatus == OutputStatus.Success)
+            return Ok(result);
+
+        return StatusCode(StatusCodes.Status500InternalServerError, result);
     }
 
     [HttpPut]
-    public async Task<IActionResult> PutClient(Client client)
+    public async Task<IActionResult> PutClient(PutClientDAO putClientDAO, CancellationToken cancellationToken)
     {
-        var result = await _clientService.PutClient(client);
+        var result = await _putClientUseCase.Handle(putClientDAO, cancellationToken);
 
-        return result ? Ok() : BadRequest();
+        if (result.OutputStatus == OutputStatus.Success)
+            return Ok(result);
+
+        return StatusCode(StatusCodes.Status500InternalServerError, result);
     }
 }

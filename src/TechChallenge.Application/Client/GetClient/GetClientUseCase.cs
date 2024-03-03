@@ -4,20 +4,28 @@ using TechChallenge.Domain.Repositories;
 
 namespace TechChallenge.Application.Order.GetClient
 {
-    public class GetClientUseCase : IUseCase<GetClientDAO, UseCaseOutput<IEnumerable<Domain.Entities.Order>>>
+    public class GetClientUseCase : IUseCase<GetClientDAO, UseCaseOutput<Domain.Entities.Client>>
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IClientRepository _clientRepository;
 
-        public GetClientUseCase(IOrderRepository orderRepository)
+        public GetClientUseCase(IClientRepository clientRepository)
         {
-            _orderRepository = orderRepository;
+            _clientRepository = clientRepository;
         }
 
-        public async Task<UseCaseOutput<IEnumerable<Domain.Entities.Order>>> Handle(GetClientDAO input, CancellationToken cancellationToken)
+        public async Task<UseCaseOutput<Domain.Entities.Client>> Handle(GetClientDAO input, CancellationToken cancellationToken)
         {
-            var ordersByStatus = await _orderRepository.GetOrdersByStatus(input.OrderStatus);
+            try
+            {
+                var ordersByStatus = await _clientRepository.GetClient(input.Cpf);
 
-            return new UseCaseOutput<IEnumerable<Domain.Entities.Order>>(ordersByStatus);
+                return new UseCaseOutput<Domain.Entities.Client>(ordersByStatus);
+            }
+            catch (Exception ex)
+            {
+                return new UseCaseOutput<Domain.Entities.Client>($"Erro ao consultar cliente cpf: [{input.Cpf}] - {ex.Message}");
+            }
+            
         }
     }
 }

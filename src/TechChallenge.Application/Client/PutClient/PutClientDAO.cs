@@ -5,10 +5,7 @@ namespace TechChallenge.Application.Order.PutClient;
 
 public class PutClientDAO: IUseCaseDAO
 {
-    public readonly OrderStatus OrderStatus;
-
-    public PutClientDAO(OrderStatus orderStatus)
-    {
-        OrderStatus = orderStatus;
-    }
+    public long Cpf { get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
 }

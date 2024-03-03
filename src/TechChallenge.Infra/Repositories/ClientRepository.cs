@@ -15,7 +15,7 @@ public class ClientRepository: IClientRepository
         _dbConnection = databaseProvider.DbConnection;
     }
 
-    public async Task<Client?> GetClient(long cpf)
+    public async Task<Client> GetClient(long cpf)
     {
         var sql = @"SELECT [cpf]
                       ,[name]
@@ -28,13 +28,7 @@ public class ClientRepository: IClientRepository
         var parameters = new DynamicParameters();
         parameters.Add("cpf", cpf);
 
-        try
-        {
-            return await _dbConnection.QueryFirstAsync<Client>(sql, parameters);
-        } catch (Exception)
-        {
-            return null;
-        }        
+        return await _dbConnection.QueryFirstAsync<Client>(sql, parameters);    
     }
 
     public async Task<bool> PutClient(Client client)
@@ -79,13 +73,6 @@ public class ClientRepository: IClientRepository
         parameters.Add("name", client.Name);
         parameters.Add("email", client.Email);
 
-        try
-        {
-            return await _dbConnection.ExecuteAsync(sql, parameters) > 0;
-        }
-        catch (Exception)
-        {
-            return false;
-        }
+        return await _dbConnection.ExecuteAsync(sql, parameters) > 0;
     }
 }

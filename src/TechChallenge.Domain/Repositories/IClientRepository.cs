@@ -5,5 +5,5 @@ namespace TechChallenge.Domain.Repositories;
 public interface IClientRepository
 {
     Task<bool> PutClient(Client client);
-    Task<Client?> GetClient(long cpf);
+    Task<Client> GetClient(long cpf);
 }

@@ -10,7 +10,6 @@ using TechChallenge.Application.Order.RemoveProductToOrder;
 using TechChallenge.Application.Order.UpdateOrderStatus;
 using TechChallenge.Domain.Entities;
 using TechChallenge.Domain.Enums;
-using TechChallenge.Domain.Ports.Services;
 
 namespace TechChallenge.Api.Controllers.v1;
 
@@ -18,7 +17,6 @@ namespace TechChallenge.Api.Controllers.v1;
 [Route("api/v1/[controller]")]
 public class OrderController : ControllerBase
 {
-    private readonly IOrderService _orderService;
     private readonly IUseCase<GetOrdersByStatusDAO, UseCaseOutput<IEnumerable<Order>>> _getOrdersByStatusUseCase;
     private readonly IUseCase<GetOrderByIdDAO, UseCaseOutput<Order>> _getOrderByIdUseCase;
     private readonly IUseCase<UpdateOrderStatusDAO, UseCaseOutput<int>> _updateOrderStatusUseCase;
@@ -27,7 +25,6 @@ public class OrderController : ControllerBase
     private readonly IUseCase<RemoveProductToOrderDAO, UseCaseOutput<int>> _removeProductToOrderUseCase;
 
     public OrderController(
-        IOrderService orderService,
         IUseCase<GetOrdersByStatusDAO, UseCaseOutput<IEnumerable<Order>>> getOrdersByStatusUseCase,
         IUseCase<GetOrderByIdDAO, UseCaseOutput<Order>> getOrderByIdUseCase,
         IUseCase<UpdateOrderStatusDAO, UseCaseOutput<int>> updateOrderStatusUseCase,
@@ -36,7 +33,6 @@ public class OrderController : ControllerBase
         IUseCase<RemoveProductToOrderDAO, UseCaseOutput<int>> removeProductToOrderUseCase
     )
     {
-        _orderService = orderService;
         _getOrdersByStatusUseCase = getOrdersByStatusUseCase;
         _getOrderByIdUseCase = getOrderByIdUseCase;
         _updateOrderStatusUseCase = updateOrderStatusUseCase;

@@ -14,9 +14,7 @@ using TechChallenge.Application.Order.PutProductToOrder;
 using TechChallenge.Application.Order.RemoveProductToOrder;
 using TechChallenge.Application.Order.SetPayment;
 using TechChallenge.Application.Order.UpdateOrderStatus;
-using TechChallenge.Application.Services;
 using TechChallenge.Domain.Entities;
-using TechChallenge.Domain.Ports.Services;
 using TechChallenge.Domain.Repositories;
 using TechChallenge.Infra.Context;
 using TechChallenge.Infra.Provider;
@@ -28,17 +26,8 @@ public static class DependencyInjection
 {
     public static void AddPortsAndAdapters(this IServiceCollection services)
     {
-        services.AddServices();
         services.AddRepositories();
         services.AddUseCases();
-    }
-
-    public static void AddServices(this IServiceCollection services)
-    {
-        services.AddTransient<IClientService, ClientService>();
-        services.AddTransient<IOrderService, OrderService>();
-        services.AddTransient<IPaymentService, PaymentService>();
-        services.AddTransient<IProductService, ProductService>();
     }
 
     public static void AddRepositories(this IServiceCollection services)

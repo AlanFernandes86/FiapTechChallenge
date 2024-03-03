@@ -1,5 +1,4 @@
 ﻿using TechChallenge.Domain.Enums;
-using TechChallenge.Domain.Schema;
 
 namespace TechChallenge.Domain.Entities;
 

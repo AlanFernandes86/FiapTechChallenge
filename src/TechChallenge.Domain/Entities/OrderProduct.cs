@@ -1,6 +1,4 @@
-﻿using TechChallenge.Domain.Schema;
-
-namespace TechChallenge.Domain.Entities;
+﻿namespace TechChallenge.Domain.Entities;
 
 public class OrderProduct
 {

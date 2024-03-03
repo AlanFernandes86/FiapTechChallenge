@@ -1,10 +1,12 @@
 ﻿using TechChallenge.Application.Common.UseCase.Interfaces;
 using TechChallenge.Application.Common.UseCase.Models;
+using TechChallenge.Domain.Entities;
+using TechChallenge.Domain.Enums;
 using TechChallenge.Domain.Repositories;
 
 namespace TechChallenge.Application.Order.CreateOrder
 {
-    public class CreateOrderUseCase : IUseCase<CreateOrderDAO, UseCaseOutput<IEnumerable<Domain.Entities.Order>>>
+    public class CreateOrderUseCase : IUseCase<CreateOrderDAO, UseCaseOutput<int>>
     {
         private readonly IOrderRepository _orderRepository;
 
@@ -13,11 +15,32 @@ namespace TechChallenge.Application.Order.CreateOrder
             _orderRepository = orderRepository;
         }
 
-        public async Task<UseCaseOutput<IEnumerable<Domain.Entities.Order>>> Handle(CreateOrderDAO input)
+        public async Task<UseCaseOutput<int>> Handle(CreateOrderDAO input)
         {
-            var ordersByStatus = await _orderRepository.GetOrdersByStatus(input.OrderStatus);
+            try
+            {
+                var order = new Domain.Entities.Order
+                {
+                    StatusId = OrderStatus.CREATED,
+                    ClientCpf = input.ClientCpf,
+                    Products = input.Products.Select(x => new OrderProduct
+                    {
+                        ProductId = x.ProductId,
+                        Price = x.Price,
+                        Quantity = x.Quantity
+                    }).ToList()
+                };
 
-            return new UseCaseOutput<IEnumerable<Domain.Entities.Order>>(ordersByStatus);
+                var ordersByStatus = await _orderRepository.CreateOrder(order);
+
+                return new UseCaseOutput<int>(ordersByStatus);
+            }
+            catch (Exception ex)
+            {
+                var cpfOrAnonymous = input.ClientCpf == 0 ? "Anônimo" : input.ClientCpf.ToString();
+                return new UseCaseOutput<int>($"Erro ao criar novo pedido para o cliente cpf: [{cpfOrAnonymous}] - {ex.Message}");
+            }
+            
         }
     }
 }

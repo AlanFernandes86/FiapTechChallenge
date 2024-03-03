@@ -5,10 +5,8 @@ namespace TechChallenge.Domain.Entities;
 
 public class Order
 {
-    [SwaggerIgnore]
     public int? Id { get; set; }
 
-    [SwaggerIgnore]
     public OrderStatus StatusId { get; set; }
 
     public long ClientCpf { get; set; }

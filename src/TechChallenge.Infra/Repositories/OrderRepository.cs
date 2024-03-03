@@ -121,23 +121,16 @@ public class OrderRepository: IOrderRepository
             parameters.Add("status", OrderStatus.CREATED);
             parameters.Add("clientCpf", order.ClientCpf);
 
-            try
+            var orderId = await _dbConnection.QueryFirstOrDefaultAsync<int>(sql, parameters);
+
+            foreach (var orderProduct in order.Products)
             {
-                var orderId = await _dbConnection.QueryFirstOrDefaultAsync<int>(sql, parameters);
-
-                foreach (var orderProduct in order.Products)
-                {
-                    await PutProductToOrder(orderProduct, orderId);
-                }
-
-                transactionScope.Complete();
-
-                return orderId > 0 ? orderId : -1;
+                await PutProductToOrder(orderProduct, orderId);
             }
-            catch (Exception e)
-            {
-                return -1;
-            }
+
+            transactionScope.Complete();
+
+            return orderId > 0 ? orderId : -1;
         }
     }
 
@@ -194,15 +187,8 @@ public class OrderRepository: IOrderRepository
         parameters.Add("quantity", orderProduct.Quantity);
         parameters.Add("price", orderProduct.Price);
 
-        try
-        {
-            var orderProductId = await _dbConnection.QueryFirstAsync<int>(sql, parameters);
-            return orderProductId > 0 ? orderProductId : -1;
-        }
-        catch (Exception e)
-        {
-            return -1;
-        }
+        var orderProductId = await _dbConnection.QueryFirstAsync<int>(sql, parameters);
+        return orderProductId > 0 ? orderProductId : -1;
     }
 
     public async Task<int> RemoveProductToOrder(int orderProductId)

@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Threading;
 using TechChallenge.Api.Controllers.Common;
 using TechChallenge.Application.Common.UseCase.Interfaces;
 using TechChallenge.Application.Common.UseCase.Models;
+using TechChallenge.Application.Order.CreateOrder;
 using TechChallenge.Application.Order.GetOrdersById;
 using TechChallenge.Application.Order.GetOrdersByStatus;
+using TechChallenge.Application.Order.PutProductToOrder;
 using TechChallenge.Application.Order.UpdateOrderStatus;
 using TechChallenge.Domain.Entities;
 using TechChallenge.Domain.Enums;
@@ -20,18 +21,24 @@ public class OrderController : ControllerBase
     private readonly IUseCase<GetOrdersByStatusDAO, UseCaseOutput<IEnumerable<Order>>> _getOrdersByStatusUseCase;
     private readonly IUseCase<GetOrderByIdDAO, UseCaseOutput<Order>> _getOrderByIdUseCase;
     private readonly IUseCase<UpdateOrderStatusDAO, UseCaseOutput<int>> _updateOrderStatusUseCase;
+    private readonly IUseCase<CreateOrderDAO, UseCaseOutput<int>> _createOrderUseCase;
+    private readonly IUseCase<PutProductToOrderDAO, UseCaseOutput<int>> _putProductToOrderUseCase;
 
     public OrderController(
         IOrderService orderService,
         IUseCase<GetOrdersByStatusDAO, UseCaseOutput<IEnumerable<Order>>> getOrdersByStatusUseCase,
         IUseCase<GetOrderByIdDAO, UseCaseOutput<Order>> getOrderByIdUseCase,
-        IUseCase<UpdateOrderStatusDAO, UseCaseOutput<int>> updateOrderStatusUseCase
+        IUseCase<UpdateOrderStatusDAO, UseCaseOutput<int>> updateOrderStatusUseCase,
+        IUseCase<CreateOrderDAO, UseCaseOutput<int>> createOrderUseCase,
+        IUseCase<PutProductToOrderDAO, UseCaseOutput<int>> putProductToOrderUseCase
     )
     {
         _orderService = orderService;
         _getOrdersByStatusUseCase = getOrdersByStatusUseCase;
         _getOrderByIdUseCase = getOrderByIdUseCase;
         _updateOrderStatusUseCase = updateOrderStatusUseCase;
+        _createOrderUseCase = createOrderUseCase;
+        _putProductToOrderUseCase = putProductToOrderUseCase;
     }
 
     [HttpPatch("Status/{orderId}")]
@@ -61,19 +68,19 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateOrder(Order order)
+    public async Task<IActionResult> CreateOrder(CreateOrderDAO createOrderDAO)
     {
-        var result = await _orderService.CreateOrder(order);
+        var output = await _createOrderUseCase.Handle(createOrderDAO);
 
-        return result != -1 ? Ok(new { id = result }) : BadRequest();
+        return output.ToResult(this);
     }
 
     [HttpPut("Product")]
-    public async Task<IActionResult> PutProductToOrder(OrderProduct orderProduct, int orderId)
+    public async Task<IActionResult> PutProductToOrder(PutProductToOrderDAO putProductToOrder)
     {
-        var result = await _orderService.PutProductToOrder(orderProduct, orderId);
+        var output = await _putProductToOrderUseCase.Handle(putProductToOrder);
 
-        return result != -1 ? Ok(new { id = result }) : BadRequest();
+        return output.ToResult(this);
     }
 
     [HttpDelete("Product/{orderProductId}")]

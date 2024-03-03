@@ -1,14 +1,18 @@
 ﻿using TechChallenge.Application.Common.UseCase.Interfaces;
-using TechChallenge.Domain.Enums;
+
 
 namespace TechChallenge.Application.Order.CreateOrder;
 
 public class CreateOrderDAO: IUseCaseDAO
 {
-    public readonly OrderStatus OrderStatus;
+    public long ClientCpf { get; set; } = 0;
 
-    public CreateOrderDAO(OrderStatus orderStatus)
-    {
-        OrderStatus = orderStatus;
-    }
+    public List<OrderProductDAO> Products { get; set; }
+}
+
+public class OrderProductDAO: IUseCaseDAO
+{
+    public int ProductId { get; set; }
+    public float Price { get; set; }
+    public int Quantity { get; set; }
 }

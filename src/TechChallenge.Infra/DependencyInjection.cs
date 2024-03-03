@@ -1,10 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using TechChallenge.Application.Common.UseCase.Interfaces;
 using TechChallenge.Application.Common.UseCase.Models;
+using TechChallenge.Application.Order.CreateOrder;
 using TechChallenge.Application.Order.GetClient;
 using TechChallenge.Application.Order.GetOrdersById;
 using TechChallenge.Application.Order.GetOrdersByStatus;
 using TechChallenge.Application.Order.PutClient;
+using TechChallenge.Application.Order.PutProductToOrder;
 using TechChallenge.Application.Order.SetPayment;
 using TechChallenge.Application.Order.UpdateOrderStatus;
 using TechChallenge.Application.Services;
@@ -52,6 +54,8 @@ public static class DependencyInjection
         services.AddTransient<IUseCase<GetOrdersByStatusDAO, UseCaseOutput<IEnumerable<Order>>>, GetOrdersByStatusUseCase>();
         services.AddTransient<IUseCase<GetOrderByIdDAO, UseCaseOutput<Order>>, GetOrderByIdUseCase>();
         services.AddTransient<IUseCase<UpdateOrderStatusDAO, UseCaseOutput<int>>,  UpdateOrderStatusUseCase>();
+        services.AddTransient<IUseCase<CreateOrderDAO, UseCaseOutput<int>>,  CreateOrderUseCase>();
+        services.AddTransient<IUseCase<PutProductToOrderDAO, UseCaseOutput<int>>,  PutProductToOrderUseCase>();
 
         services.AddTransient<IUseCase<SetPaymentDAO, UseCaseOutput<int>>,  SetPaymentUseCase>();
     }

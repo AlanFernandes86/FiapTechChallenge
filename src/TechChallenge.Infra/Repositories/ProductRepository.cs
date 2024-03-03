@@ -15,24 +15,18 @@ public class ProductRepository : IProductRepository
         _dbConnection = databaseProvider.DbConnection;
     }
 
-    public async Task<IEnumerable<ProductCategory>?> GetProductCategories()
+    public async Task<IEnumerable<ProductCategory>> GetProductCategories()
     {
         var sql = @"SELECT [id]
                       ,[name]
                       ,[updated_at]
                       ,[created_at]
                   FROM [TechChallenge].[dbo].[product_category]";
-        try
-        {
-            return await _dbConnection.QueryAsync<ProductCategory>(sql);
-        }
-        catch (Exception)
-        {
-            return null;
-        }
+
+        return await _dbConnection.QueryAsync<ProductCategory>(sql);
     }
 
-    public async Task<IEnumerable<Product>?> GetProductsByCategory(int categoryId)
+    public async Task<IEnumerable<Product>> GetProductsByCategory(int categoryId)
     {
         var sql = @"SELECT [id]
                       ,[product_category_id] as CategoryId
@@ -47,14 +41,7 @@ public class ProductRepository : IProductRepository
         var parameters = new DynamicParameters();
         parameters.Add("categoryId", categoryId);
 
-        try
-        {
-            return await _dbConnection.QueryAsync<Product>(sql, parameters);
-        }
-        catch (Exception)
-        {
-            return null;
-        }
+        return await _dbConnection.QueryAsync<Product>(sql, parameters);
     }
 
     public async Task<int> PutProduct(Product product)
@@ -112,18 +99,11 @@ public class ProductRepository : IProductRepository
         parameters.Add("description", product.Description);
         parameters.Add("price", product.Price);
 
-        try
-        {
-            var productId = await _dbConnection.QueryFirstAsync<int>(sql, parameters);
-            return productId > 0 ? productId : -1;
-        }
-        catch (Exception e)
-        {
-            return -1;
-        }
+        var productId = await _dbConnection.QueryFirstAsync<int>(sql, parameters);
+        return productId > 0 ? productId : -1;
     }
 
-    public async Task<bool> PutProductCategory(ProductCategory productCategory)
+    public async Task<int> PutProductCategory(ProductCategory productCategory)
     {
         var sql = @"MERGE INTO [dbo].[product_category] AS target
                     USING (
@@ -153,19 +133,14 @@ public class ProductRepository : IProductRepository
                            (source.[id]
                            ,source.[name]
                            ,source.[updated_at]
-                           ,source.[created_at]);";
+                           ,source.[created_at])
+                        OUTPUT INSERTED.id;";
 
         var parameters = new DynamicParameters();
         parameters.Add("id", productCategory.Id);
         parameters.Add("name", productCategory.Name);
 
-        try
-        {
-            return await _dbConnection.ExecuteAsync(sql, parameters) > 0;
-        }
-        catch (Exception)
-        {
-            return false;
-        }
+        var productCategoryId = await _dbConnection.QueryFirstAsync<int>(sql, parameters);
+        return productCategoryId > 0 ? productCategoryId : -1;
     }
 }

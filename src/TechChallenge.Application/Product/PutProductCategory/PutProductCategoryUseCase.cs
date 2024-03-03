@@ -1,23 +1,40 @@
 ﻿using TechChallenge.Application.Common.UseCase.Interfaces;
 using TechChallenge.Application.Common.UseCase.Models;
+using TechChallenge.Domain.Entities;
 using TechChallenge.Domain.Repositories;
 
 namespace TechChallenge.Application.Order.PutProductCategory
 {
-    public class PutProductCategoryUseCase : IUseCase<PutProductCategoryDAO, UseCaseOutput<IEnumerable<Domain.Entities.Order>>>
+    public class PutProductCategoryUseCase : IUseCase<PutProductCategoryDAO, UseCaseOutput<int>>
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IProductRepository _productRepository;
 
-        public PutProductCategoryUseCase(IOrderRepository orderRepository)
+        public PutProductCategoryUseCase(IProductRepository productRepository)
         {
-            _orderRepository = orderRepository;
+            _productRepository = productRepository;
         }
 
-        public async Task<UseCaseOutput<IEnumerable<Domain.Entities.Order>>> Handle(PutProductCategoryDAO input)
+        public async Task<UseCaseOutput<int>> Handle(PutProductCategoryDAO input)
         {
-            var ordersByStatus = await _orderRepository.GetOrdersByStatus(input.OrderStatus);
+            try
+            {
+                var productCategory = new ProductCategory
+                {
+                    Id = input.Id,
+                    Name = input.Name
+                };
 
-            return new UseCaseOutput<IEnumerable<Domain.Entities.Order>>(ordersByStatus);
+                var newProductCategoryId = await _productRepository.PutProductCategory(productCategory);
+
+                return new UseCaseOutput<int>(newProductCategoryId);
+            }
+            catch (Exception ex)
+            {
+                var id = input.Id != null ? $" id: [{input.Id}] " : string.Empty;
+                var updateOrCreate = input.Id != null ? "Atualizar" : "Cadastrar";
+                return new UseCaseOutput<int>($"Erro ao {updateOrCreate} categoria [{input.Name}]{id}- {ex.Message}");
+            }
+
         }
     }
 }

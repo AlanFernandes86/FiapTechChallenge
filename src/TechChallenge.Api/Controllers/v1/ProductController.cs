@@ -1,6 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
+using TechChallenge.Application.Common.UseCase.Extensions;
+using TechChallenge.Application.Common.UseCase.Interfaces;
+using TechChallenge.Application.Common.UseCase.Models;
+using TechChallenge.Application.Order.GetProductCategories;
+using TechChallenge.Application.Order.GetProductsByCategory;
+using TechChallenge.Application.Order.PutProduct;
+using TechChallenge.Application.Order.PutProductCategory;
 using TechChallenge.Domain.Entities;
-using TechChallenge.Domain.Ports.Services;
 
 namespace TechChallenge.Api.Controllers.v1;
 
@@ -8,42 +14,53 @@ namespace TechChallenge.Api.Controllers.v1;
 [Route("api/v1/[controller]")]
 public class ProductController : ControllerBase
 {
-    private readonly IProductService _productService;
+    private readonly IUseCase<GetProductCategoriesDAO, UseCaseOutput<IEnumerable<ProductCategory>>> _getProductCategoriesUseCase;
+    private readonly IUseCase<GetProductsByCategoryDAO, UseCaseOutput<IEnumerable<Product>>> _getProductsByCategoryUseCase;
+    private readonly IUseCase<PutProductDAO, UseCaseOutput<int>> _putProductUseCase;
+    private readonly IUseCase<PutProductCategoryDAO, UseCaseOutput<int>> _putProductCategoryUseCase;
 
-    public ProductController(IProductService productService)
+    public ProductController(
+        IUseCase<GetProductCategoriesDAO, UseCaseOutput<IEnumerable<ProductCategory>>> getProductCategoriesUseCase,
+        IUseCase<GetProductsByCategoryDAO, UseCaseOutput<IEnumerable<Product>>> getProductsByCategoryUseCase,
+        IUseCase<PutProductDAO, UseCaseOutput<int>> putProductUseCase,
+        IUseCase<PutProductCategoryDAO, UseCaseOutput<int>> putProductCategoryUseCase
+        )
     {
-        _productService = productService;
+        _getProductCategoriesUseCase = getProductCategoriesUseCase;
+        _getProductsByCategoryUseCase = getProductsByCategoryUseCase;
+        _putProductUseCase = putProductUseCase;
+        _putProductCategoryUseCase = putProductCategoryUseCase;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetProductsByCategory(int categoryId)
     {
-        var result = await _productService.GetProductsByCategory(categoryId);
+        var output = await _getProductsByCategoryUseCase.Handle(new GetProductsByCategoryDAO(categoryId));
 
-        return result is not null ? Ok(result) : NotFound();
+        return output.ToResult(this);
     }
 
     [HttpPut]
-    public async Task<IActionResult> PutProduct(Product product)
+    public async Task<IActionResult> PutProduct(PutProductDAO putProductDAO)
     {
-        var result = await _productService.PutProduct(product);
+        var output = await _putProductUseCase.Handle(putProductDAO);
 
-        return result != -1 ? Ok(new { id = result }) : BadRequest();
+        return output.ToResult(this);
     }
 
     [HttpGet("Categories")]
-    public async Task<IActionResult> GetProductCategory()
+    public async Task<IActionResult> GetProductCategories()
     {
-        var result = await _productService.GetProductCategories();
+        var output = await _getProductCategoriesUseCase.Handle(new GetProductCategoriesDAO());
 
-        return result is not null ? Ok(result) : NotFound();
+        return output.ToResult(this);
     }
 
     [HttpPut("Category")]
-    public async Task<IActionResult> PutProductCategory(ProductCategory productCategory)
+    public async Task<IActionResult> PutProductCategory(PutProductCategoryDAO putProductCategoryDAO)
     {
-        var result = await _productService.PutProductCategory(productCategory);
+        var output = await _putProductCategoryUseCase.Handle(putProductCategoryDAO);
 
-        return result ? Ok() : BadRequest();
+        return output.ToResult(this);
     }
 }

@@ -18,5 +18,5 @@ public class ProductService : IProductService
 
     public Task<int> PutProduct(Product product) => _productRepository.PutProduct(product);
 
-    public Task<bool> PutProductCategory(ProductCategory productCategory) => _productRepository.PutProductCategory(productCategory);
+    public Task<int> PutProductCategory(ProductCategory productCategory) => _productRepository.PutProductCategory(productCategory);
 }

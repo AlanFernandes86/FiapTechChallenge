@@ -5,7 +5,11 @@ using TechChallenge.Application.Order.CreateOrder;
 using TechChallenge.Application.Order.GetClient;
 using TechChallenge.Application.Order.GetOrdersById;
 using TechChallenge.Application.Order.GetOrdersByStatus;
+using TechChallenge.Application.Order.GetProductCategories;
+using TechChallenge.Application.Order.GetProductsByCategory;
 using TechChallenge.Application.Order.PutClient;
+using TechChallenge.Application.Order.PutProduct;
+using TechChallenge.Application.Order.PutProductCategory;
 using TechChallenge.Application.Order.PutProductToOrder;
 using TechChallenge.Application.Order.RemoveProductToOrder;
 using TechChallenge.Application.Order.SetPayment;
@@ -54,12 +58,17 @@ public static class DependencyInjection
 
         services.AddTransient<IUseCase<GetOrdersByStatusDAO, UseCaseOutput<IEnumerable<Order>>>, GetOrdersByStatusUseCase>();
         services.AddTransient<IUseCase<GetOrderByIdDAO, UseCaseOutput<Order>>, GetOrderByIdUseCase>();
-        services.AddTransient<IUseCase<UpdateOrderStatusDAO, UseCaseOutput<int>>,  UpdateOrderStatusUseCase>();
-        services.AddTransient<IUseCase<CreateOrderDAO, UseCaseOutput<int>>,  CreateOrderUseCase>();
-        services.AddTransient<IUseCase<PutProductToOrderDAO, UseCaseOutput<int>>,  PutProductToOrderUseCase>();
-        services.AddTransient<IUseCase<RemoveProductToOrderDAO, UseCaseOutput<int>>,  RemoveProductToOrderUseCase>();
+        services.AddTransient<IUseCase<UpdateOrderStatusDAO, UseCaseOutput<int>>, UpdateOrderStatusUseCase>();
+        services.AddTransient<IUseCase<CreateOrderDAO, UseCaseOutput<int>>, CreateOrderUseCase>();
+        services.AddTransient<IUseCase<PutProductToOrderDAO, UseCaseOutput<int>>, PutProductToOrderUseCase>();
+        services.AddTransient<IUseCase<RemoveProductToOrderDAO, UseCaseOutput<int>>, RemoveProductToOrderUseCase>();
 
-        services.AddTransient<IUseCase<SetPaymentDAO, UseCaseOutput<int>>,  SetPaymentUseCase>();
+        services.AddTransient<IUseCase<SetPaymentDAO, UseCaseOutput<int>>, SetPaymentUseCase>();
+
+        services.AddTransient<IUseCase<GetProductCategoriesDAO, UseCaseOutput<IEnumerable<ProductCategory>>>,  GetProductCategoriesUseCase>();
+        services.AddTransient<IUseCase<GetProductsByCategoryDAO, UseCaseOutput<IEnumerable<Product>>>,  GetProductsByCategoryUseCase>();
+        services.AddTransient<IUseCase<PutProductDAO, UseCaseOutput<int>>, PutProductUseCase>();
+        services.AddTransient<IUseCase<PutProductCategoryDAO, UseCaseOutput<int>>, PutProductCategoryUseCase>();
     }
 
 }

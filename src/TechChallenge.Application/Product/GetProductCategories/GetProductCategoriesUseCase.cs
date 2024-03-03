@@ -4,20 +4,28 @@ using TechChallenge.Domain.Repositories;
 
 namespace TechChallenge.Application.Order.GetProductCategories
 {
-    public class GetProductCategoriesUseCase : IUseCase<GetProductCategoriesDAO, UseCaseOutput<IEnumerable<Domain.Entities.Order>>>
+    public class GetProductCategoriesUseCase : IUseCase<GetProductCategoriesDAO, UseCaseOutput<IEnumerable<Domain.Entities.ProductCategory>>>
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IProductRepository _productRepository;
 
-        public GetProductCategoriesUseCase(IOrderRepository orderRepository)
+        public GetProductCategoriesUseCase(IProductRepository productRepository)
         {
-            _orderRepository = orderRepository;
+            _productRepository = productRepository;
         }
 
-        public async Task<UseCaseOutput<IEnumerable<Domain.Entities.Order>>> Handle(GetProductCategoriesDAO input)
+        public async Task<UseCaseOutput<IEnumerable<Domain.Entities.ProductCategory>>> Handle(GetProductCategoriesDAO input)
         {
-            var ordersByStatus = await _orderRepository.GetOrdersByStatus(input.OrderStatus);
+            try
+            {
+                var ordersByStatus = await _productRepository.GetProductCategories();
 
-            return new UseCaseOutput<IEnumerable<Domain.Entities.Order>>(ordersByStatus);
+                return new UseCaseOutput<IEnumerable<Domain.Entities.ProductCategory>>(ordersByStatus);
+            }
+            catch (Exception ex)
+            {
+                return new UseCaseOutput<IEnumerable<Domain.Entities.ProductCategory>>($"Erro ao buscar categorias de produtos na base de dados - {ex.Message}");
+            }
+
         }
     }
 }

@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using TechChallenge.Api.Controllers.Common;
+using TechChallenge.Application.Common.UseCase.Extensions;
 using TechChallenge.Application.Common.UseCase.Interfaces;
 using TechChallenge.Application.Common.UseCase.Models;
 using TechChallenge.Application.Order.CreateOrder;

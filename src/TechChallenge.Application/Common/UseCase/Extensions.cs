@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TechChallenge.Application.Common.UseCase.Interfaces;
 using TechChallenge.Application.Common.UseCase.Models;
 
-namespace TechChallenge.Api.Controllers.Common
+namespace TechChallenge.Application.Common.UseCase.Extensions
 {
     public static class Extensions
     {

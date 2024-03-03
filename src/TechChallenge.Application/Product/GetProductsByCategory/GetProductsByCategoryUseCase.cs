@@ -1,23 +1,32 @@
 ﻿using TechChallenge.Application.Common.UseCase.Interfaces;
 using TechChallenge.Application.Common.UseCase.Models;
+using TechChallenge.Domain.Entities;
 using TechChallenge.Domain.Repositories;
 
 namespace TechChallenge.Application.Order.GetProductsByCategory
 {
-    public class GetProductsByCategoryUseCase : IUseCase<GetProductsByCategoryDAO, UseCaseOutput<IEnumerable<Domain.Entities.Order>>>
+    public class GetProductsByCategoryUseCase : IUseCase<GetProductsByCategoryDAO, UseCaseOutput<IEnumerable<Product>>>
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IProductRepository _productRepository;
 
-        public GetProductsByCategoryUseCase(IOrderRepository orderRepository)
+        public GetProductsByCategoryUseCase(IProductRepository productRepository)
         {
-            _orderRepository = orderRepository;
+            _productRepository = productRepository;
         }
 
-        public async Task<UseCaseOutput<IEnumerable<Domain.Entities.Order>>> Handle(GetProductsByCategoryDAO input)
+        public async Task<UseCaseOutput<IEnumerable<Product>>> Handle(GetProductsByCategoryDAO input)
         {
-            var ordersByStatus = await _orderRepository.GetOrdersByStatus(input.OrderStatus);
+            try
+            {
+                var products = await _productRepository.GetProductsByCategory(input.CategoryId);
 
-            return new UseCaseOutput<IEnumerable<Domain.Entities.Order>>(ordersByStatus);
+                return new UseCaseOutput<IEnumerable<Product>>(products);
+            }
+            catch (Exception)
+            {
+                return new UseCaseOutput<IEnumerable<Product>>($"Erro ao buscar produtos pela categoria id: [{input.CategoryId}]");
+            }
+            
         }
     }
 }

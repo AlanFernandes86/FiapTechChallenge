@@ -6,6 +6,7 @@ using TechChallenge.Application.Order.GetOrdersById;
 using TechChallenge.Application.Order.GetOrdersByStatus;
 using TechChallenge.Application.Order.PutClient;
 using TechChallenge.Application.Order.SetPayment;
+using TechChallenge.Application.Order.UpdateOrderStatus;
 using TechChallenge.Application.Services;
 using TechChallenge.Domain.Entities;
 using TechChallenge.Domain.Ports.Services;
@@ -50,6 +51,7 @@ public static class DependencyInjection
 
         services.AddTransient<IUseCase<GetOrdersByStatusDAO, UseCaseOutput<IEnumerable<Order>>>, GetOrdersByStatusUseCase>();
         services.AddTransient<IUseCase<GetOrderByIdDAO, UseCaseOutput<Order>>, GetOrderByIdUseCase>();
+        services.AddTransient<IUseCase<UpdateOrderStatusDAO, UseCaseOutput<int>>,  UpdateOrderStatusUseCase>();
 
         services.AddTransient<IUseCase<SetPaymentDAO, UseCaseOutput<int>>,  SetPaymentUseCase>();
     }

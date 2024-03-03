@@ -4,7 +4,7 @@ using TechChallenge.Domain.Repositories;
 
 namespace TechChallenge.Application.Order.UpdateOrderStatus
 {
-    public class UpdateOrderStatusUseCase : IUseCase<UpdateOrderStatusDAO, UseCaseOutput<IEnumerable<Domain.Entities.Order>>>
+    public class UpdateOrderStatusUseCase : IUseCase<UpdateOrderStatusDAO, UseCaseOutput<int>>
     {
         private readonly IOrderRepository _orderRepository;
 
@@ -13,11 +13,18 @@ namespace TechChallenge.Application.Order.UpdateOrderStatus
             _orderRepository = orderRepository;
         }
 
-        public async Task<UseCaseOutput<IEnumerable<Domain.Entities.Order>>> Handle(UpdateOrderStatusDAO input)
+        public async Task<UseCaseOutput<int>> Handle(UpdateOrderStatusDAO input)
         {
-            var ordersByStatus = await _orderRepository.GetOrdersByStatus(input.OrderStatus);
+            try
+            {
+                var ordersByStatus = await _orderRepository.UpdateOrderStatus(input.OrderId, input.OrderStatus);
 
-            return new UseCaseOutput<IEnumerable<Domain.Entities.Order>>(ordersByStatus);
+                return new UseCaseOutput<int>(ordersByStatus);
+            }
+            catch (Exception)
+            {
+                return new UseCaseOutput<int>($"Erro ao atualizar status do pedido id: [{input.OrderId}]");
+            }            
         }
     }
 }

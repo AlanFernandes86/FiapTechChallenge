@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;
+using TechChallenge.Api.Controllers.Common;
 using TechChallenge.Application.Common.UseCase.Interfaces;
 using TechChallenge.Application.Common.UseCase.Models;
 using TechChallenge.Application.Order.GetOrdersById;
 using TechChallenge.Application.Order.GetOrdersByStatus;
+using TechChallenge.Application.Order.UpdateOrderStatus;
 using TechChallenge.Domain.Entities;
 using TechChallenge.Domain.Enums;
 using TechChallenge.Domain.Ports.Services;
@@ -17,48 +19,45 @@ public class OrderController : ControllerBase
     private readonly IOrderService _orderService;
     private readonly IUseCase<GetOrdersByStatusDAO, UseCaseOutput<IEnumerable<Order>>> _getOrdersByStatusUseCase;
     private readonly IUseCase<GetOrderByIdDAO, UseCaseOutput<Order>> _getOrderByIdUseCase;
+    private readonly IUseCase<UpdateOrderStatusDAO, UseCaseOutput<int>> _updateOrderStatusUseCase;
 
     public OrderController(
         IOrderService orderService,
         IUseCase<GetOrdersByStatusDAO, UseCaseOutput<IEnumerable<Order>>> getOrdersByStatusUseCase,
-        IUseCase<GetOrderByIdDAO, UseCaseOutput<Order>> getOrderByIdUseCase
+        IUseCase<GetOrderByIdDAO, UseCaseOutput<Order>> getOrderByIdUseCase,
+        IUseCase<UpdateOrderStatusDAO, UseCaseOutput<int>> updateOrderStatusUseCase
     )
     {
         _orderService = orderService;
         _getOrdersByStatusUseCase = getOrdersByStatusUseCase;
         _getOrderByIdUseCase = getOrderByIdUseCase;
+        _updateOrderStatusUseCase = updateOrderStatusUseCase;
     }
 
-    [HttpPatch("Status")]
-    public async Task<IActionResult> UpdateOrderStatus(int orderId, OrderStatus orderStatus)
+    [HttpPatch("Status/{orderId}")]
+    public async Task<IActionResult> UpdateOrderStatus(int orderId, [FromQuery] OrderStatus orderStatus)
     {
-        var result = await _orderService.UpdateOrderStatus(orderId, orderStatus);
+        var output = await _updateOrderStatusUseCase.Handle(new UpdateOrderStatusDAO(orderId, orderStatus));
 
-        return result != -1 ? Ok(new { id = result, status = orderStatus }) : BadRequest();
+        return output.ToResult(this);
     }
 
-    [HttpGet("ByStatus")]
+    [HttpGet("Status/{orderStatus}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UseCaseOutput<IEnumerable<Order>>))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(UseCaseOutput<IEnumerable<Order>>))]
     public async Task<IActionResult> GetOrderByStatus(OrderStatus orderStatus)
     {
-        var result = await _getOrdersByStatusUseCase.Handle(new GetOrdersByStatusDAO(orderStatus));
+        var output = await _getOrdersByStatusUseCase.Handle(new GetOrdersByStatusDAO(orderStatus));
 
-        if (result.OutputStatus == OutputStatus.Success)
-            return Ok(result);
-
-        return StatusCode(StatusCodes.Status500InternalServerError, result);
+        return output.ToResult(this);
     }
 
     [HttpGet("{orderId}")]
     public async Task<IActionResult> GetOrderById(int orderId)
     {
-        var result = await _getOrderByIdUseCase.Handle(new GetOrderByIdDAO(orderId));
+        var output = await _getOrderByIdUseCase.Handle(new GetOrderByIdDAO(orderId));
 
-        if (result.OutputStatus == OutputStatus.Success)
-            return Ok(result);
-
-        return StatusCode(StatusCodes.Status500InternalServerError, result);
+        return output.ToResult(this);
     }
 
     [HttpPost]
@@ -77,7 +76,7 @@ public class OrderController : ControllerBase
         return result != -1 ? Ok(new { id = result }) : BadRequest();
     }
 
-    [HttpDelete("Product")]
+    [HttpDelete("Product/{orderProductId}")]
     public async Task<IActionResult> RemoveProductToOrder(int orderProductId)
     {
         var result = await _orderService.RemoveProductToOrder(orderProductId);

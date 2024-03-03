@@ -5,10 +5,12 @@ namespace TechChallenge.Application.Order.UpdateOrderStatus;
 
 public class UpdateOrderStatusDAO: IUseCaseDAO
 {
-    public readonly OrderStatus OrderStatus;
+    public int OrderId;
+    public OrderStatus OrderStatus;
 
-    public UpdateOrderStatusDAO(OrderStatus orderStatus)
+    public UpdateOrderStatusDAO(int orderId, OrderStatus orderStatus)
     {
+        OrderId = orderId;
         OrderStatus = orderStatus;
     }
 }

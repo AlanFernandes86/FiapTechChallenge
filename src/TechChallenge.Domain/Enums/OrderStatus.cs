@@ -2,10 +2,11 @@
 
 public enum OrderStatus
 {
-    CREATED = 0,
-    RECEIVED = 1,
-    IN_PREPARATION = 2,
-    READY = 3,
-    COMPLETED = 4,
-    CANCELLED = 5
+    CREATED = 1,
+    RECEIVED = 2,
+    IN_PREPARATION = 4,
+    READY = 8,
+    COMPLETED = 16,
+    CANCELLED = 32,
+    ACTIVE = RECEIVED | IN_PREPARATION | READY
 }

@@ -44,9 +44,9 @@ public class OrderController : ControllerBase
     [HttpPatch("Status/{orderId}")]
     public async Task<IActionResult> UpdateOrderStatus(int orderId, [FromQuery] OrderStatus orderStatus)
     {
-        var output = await _updateOrderStatusUseCase.Handle(new UpdateOrderStatusDAO(orderId, orderStatus));
+       var output = await _updateOrderStatusUseCase.Handle(new UpdateOrderStatusDAO(orderId, orderStatus));        
 
-        return output.ToActionResult(this);
+       return output.ToActionResult(this);
     }
 
     [HttpGet("Status/{orderStatus}")]

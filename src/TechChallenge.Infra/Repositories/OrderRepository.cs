@@ -19,6 +19,13 @@ public class OrderRepository: IOrderRepository
 
     public async Task<IEnumerable<Order>> GetOrdersByStatus(OrderStatus orderStatus)
     {
+        int[] status = new int[] { (int)orderStatus };
+
+        if (orderStatus == OrderStatus.ACTIVE)
+        {
+            status = new int[] { (int)OrderStatus.RECEIVED, (int)OrderStatus.IN_PREPARATION, (int)OrderStatus.READY };
+        }
+
         var sql = @"SELECT o.[id]
                       ,o.[order_status_id] as StatusId
                       ,o.[client_cpf] as ClientCpf
@@ -34,10 +41,10 @@ public class OrderRepository: IOrderRepository
                         [TechChallenge].[dbo].[order_product] op ON o.id = op.order_id
                     LEFT JOIN
                         [TechChallenge].[dbo].[product] p ON op.product_id = p.id
-                  WHERE o.[order_status_id] = @orderStatus";
+                  WHERE o.[order_status_id] IN @orderStatus";
 
         var parameters = new DynamicParameters();
-        parameters.Add("orderStatus", orderStatus);
+        parameters.Add("orderStatus", status);
 
         var lookup = new Dictionary<int?, Order>();
 

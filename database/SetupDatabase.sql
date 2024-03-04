@@ -258,12 +258,12 @@ INSERT INTO [dbo].[order_status]
            ,[updated_at]
            ,[created_at])
      VALUES
-           (0, 'CREATED', GETDATE(), GETDATE()),
-		   (1, 'RECEIVED', GETDATE(), GETDATE()),
-		   (2, 'IN_PREPARATION', GETDATE(), GETDATE()),
-		   (3, 'READY', GETDATE(), GETDATE()),
-		   (4, 'COMPLETED', GETDATE(), GETDATE()),
-		   (5, 'CANCELLED', GETDATE(), GETDATE())
+           (1, 'CREATED', GETDATE(), GETDATE()),
+		   (2, 'RECEIVED', GETDATE(), GETDATE()),
+		   (4, 'IN_PREPARATION', GETDATE(), GETDATE()),
+		   (8, 'READY', GETDATE(), GETDATE()),
+		   (16, 'COMPLETED', GETDATE(), GETDATE()),
+		   (32, 'CANCELLED', GETDATE(), GETDATE())
 GO
 
 USE [TechChallenge]

@@ -1,6 +1,9 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
-using TechChallenge.Api.Controllers;
+using TechChallenge.Api;
+using TechChallenge.Application.Order.UpdateOrderStatus;
 using TechChallenge.Infra;
 
 string[] ApiVersions = { "v1" };
@@ -12,6 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 builder.Services.AddMvc(options =>
 {
     options.Conventions.Add(new ApiExplorerGroupPerVersionConvetion());
@@ -31,7 +35,10 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddGatewaysAndUseCases();
+
+builder.Services.AddScoped<IValidator<UpdateOrderStatusDAO>, UpdateOrderStatusDAOValidator>();
 
 builder.Services.AddApiVersioning(config =>
 {

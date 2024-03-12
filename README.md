@@ -1,11 +1,40 @@
-# FiapTechChallenge
+# Fiap Tech Challenge - Fase 2
 
-# Para inicializar o projeto
-- Executar o comando `docker-compose up -d` na raiz do projeto.
+Projeto referente a entrega da fase 2 do Tech Challenge do curso Software Architecture Pós Tech - turma 5SOAT.
 
-# Setup inicial
-- O docker compose irá inicializar a aplicação e o banco de dados.
-- Toda vez que o `docker-compose up -d` for executado o banco de dados será reinicializado.
-- O Swagger da aplicação estará disponível em https://localhost:63841/swagger/index.html
-- Existe um delay de 10s após o sqlserver começar a ser inicado e o script de criação da database e tabelas ser executado, caso o sqlserver demore muito para iniciar pode impedir a criação da database.
-Nesse caso pare o container e execute novamente.
+## Requisitos do negócio
+
+O back-end deve permitir:
+
+- Receber novos pedidos
+- Consultar pedido realizado
+- Consultat lista de pedidos ativos
+- Atualizar status do pedido
+- Adicionar diversos produtos a um pedido
+- Opção de pagamento integrada para MVP
+- Consultar status do pagamento
+- Acompanhar o status de cada pedido
+- Cadastrar produtos por categoria
+
+## Requisitos de infraestrutura
+
+
+## Link do swagger
+
+http://<ip-do-minekube>:31116/swagger/index.html
+
+## Como executar o projeto
+
+1 - Abrir o terminal e navegar até a pasta do projeto
+2 - Executar os seguintes comando do kubectl na ordem
+kubectl apply -f sql-data.pv.yml
+kubectl apply -f sql-data.pvc.yml
+kubectl apply -f sql-server.statefulset.yml
+kubectl apply -f sql-server.service.yml
+kubectl apply -f techchallenge.api.deployment.yml
+kubectl apply -f techchallenge.api.service.yml
+kubectl apply -f sql-server.configmap.yml
+kubectl apply -f mssqltools.job.yml
+
+## Link da collection incial no postman
+https://github.com/AlanFernandes86/FiapTechChallenge/blob/feature/fase2/TechChallenge.postman_collection.json

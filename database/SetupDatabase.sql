@@ -118,6 +118,7 @@ CREATE TABLE [dbo].[order](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[order_status_id] [int] NOT NULL,
 	[client_cpf] [varchar](11) NULL,
+	[client_name] [varchar](11) NULL,
 	[updated_at] [datetime] NOT NULL,
 	[created_at] [datetime] NOT NULL,
  CONSTRAINT [PK_order] PRIMARY KEY CLUSTERED 
@@ -258,12 +259,12 @@ INSERT INTO [dbo].[order_status]
            ,[updated_at]
            ,[created_at])
      VALUES
-           (0, 'CREATED', GETDATE(), GETDATE()),
-		   (1, 'RECEIVED', GETDATE(), GETDATE()),
-		   (2, 'IN_PREPARATION', GETDATE(), GETDATE()),
-		   (3, 'READY', GETDATE(), GETDATE()),
-		   (4, 'COMPLETED', GETDATE(), GETDATE()),
-		   (5, 'CANCELLED', GETDATE(), GETDATE())
+           (1, 'CREATED', GETDATE(), GETDATE()),
+		   (2, 'RECEIVED', GETDATE(), GETDATE()),
+		   (4, 'IN_PREPARATION', GETDATE(), GETDATE()),
+		   (8, 'READY', GETDATE(), GETDATE()),
+		   (16, 'COMPLETED', GETDATE(), GETDATE()),
+		   (32, 'CANCELLED', GETDATE(), GETDATE())
 GO
 
 USE [TechChallenge]
@@ -310,5 +311,6 @@ INSERT INTO [dbo].[client]
            ,[created_at])
      VALUES
            (29642467003,'João Apolinário','apo.joao@email.com',GETDATE(),GETDATE()),
-		   (67723050003,'Peter Parker','email.secreto@aranha.com',GETDATE(),GETDATE())
+		   (67723050003,'Peter Parker','email.secreto@aranha.com',GETDATE(),GETDATE()),
+		   (0,'Anonimo','email@anonimo.com',GETDATE(),GETDATE())
 GO

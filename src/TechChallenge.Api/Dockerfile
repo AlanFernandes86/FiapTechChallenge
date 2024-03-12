@@ -6,18 +6,20 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/TechChallenge.Api/TechChallenge.Api.csproj", "src/TechChallenge.Api/"]
 COPY ["src/TechChallenge.Infra/TechChallenge.Infra.csproj", "src/TechChallenge.Infra/"]
 COPY ["src/TechChallenge.Application/TechChallenge.Application.csproj", "src/TechChallenge.Application/"]
 COPY ["src/TechChallenge.Domain/TechChallenge.Domain.csproj", "src/TechChallenge.Domain/"]
-RUN dotnet restore "src/TechChallenge.Api/TechChallenge.Api.csproj"
+RUN dotnet restore "./src/TechChallenge.Api/TechChallenge.Api.csproj"
 COPY . .
 WORKDIR "/src/src/TechChallenge.Api"
-RUN dotnet build "TechChallenge.Api.csproj" -c Release -o /app/build
+RUN dotnet build "./TechChallenge.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "TechChallenge.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./TechChallenge.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: techchallenge-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: techchallenge-api
+
+  template:
+    metadata:
+      labels:
+        app: techchallenge-api
+        app.kubernetes.io/name: techchallenge-api
+    spec:
+      containers:
+      - name: techchallenge-api
+        image: devalanfernandes/techchallengeapi:latest
+        ports:
+          - containerPort: 80
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: "Development"
+          - name: ASPNETCORE_URLS
+            value: "http://+:80"

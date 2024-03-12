@@ -1,0 +1,167 @@
+{
+	"info": {
+		"_postman_id": "250575e1-a1c3-4cc8-9d02-4ec21e2dd0b6",
+		"name": "TechChallenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31837620"
+	},
+	"item": [
+		{
+			"name": "CreateOrder",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"clientName\": \"Luane\",\n  \"products\": [\n    {\n      \"productId\": 4,\n      \"price\": 7,\n      \"quantity\": 1\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://{{minekube-ip}}:31116/api/v1/Order",
+					"protocol": "http",
+					"host": [
+						"{{minekube-ip}}"
+					],
+					"port": "31116",
+					"path": [
+						"api",
+						"v1",
+						"Order"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetProducts",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					}
+				],
+				"url": {
+					"raw": "http://{{minekube-ip}}:31116/api/v1/Product?categoryId=2",
+					"protocol": "http",
+					"host": [
+						"{{minekube-ip}}"
+					],
+					"port": "31116",
+					"path": [
+						"api",
+						"v1",
+						"Product"
+					],
+					"query": [
+						{
+							"key": "categoryId",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetOrderById",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					}
+				],
+				"url": {
+					"raw": "http://{{minekube-ip}}:31116/api/v1/Order/2",
+					"protocol": "http",
+					"host": [
+						"{{minekube-ip}}"
+					],
+					"port": "31116",
+					"path": [
+						"api",
+						"v1",
+						"Order",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SetPayment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "text/plain"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"orderId\": 2,\n  \"value\": 31.78,\n  \"method\": 1\n}"
+				},
+				"url": {
+					"raw": "http://172.23.65.232:31116/api/v1/Payment",
+					"protocol": "http",
+					"host": [
+						"172",
+						"23",
+						"65",
+						"232"
+					],
+					"port": "31116",
+					"path": [
+						"api",
+						"v1",
+						"Payment"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "minekube-ip",
+			"value": "172.23.65.232",
+			"type": "string"
+		}
+	]
+}

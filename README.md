@@ -35,3 +35,6 @@ kubectl apply -f techchallenge.api.deployment.yml
 kubectl apply -f techchallenge.api.service.yml
 kubectl apply -f sql-server.configmap.yml
 kubectl apply -f mssqltools.job.yml
+
+## Link da collection incial no postman
+https://github.com/AlanFernandes86/FiapTechChallenge/blob/feature/fase2/TechChallenge.postman_collection.json

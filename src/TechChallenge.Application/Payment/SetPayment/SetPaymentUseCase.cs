@@ -1,5 +1,6 @@
 ﻿using TechChallenge.Application.Common.UseCase.Interfaces;
 using TechChallenge.Application.Common.UseCase.Models;
+using TechChallenge.Application.Order.UpdateOrderStatus;
 using TechChallenge.Domain.Entities;
 using TechChallenge.Domain.Repositories;
 
@@ -7,15 +8,15 @@ namespace TechChallenge.Application.Order.SetPayment
 {
     public class SetPaymentUseCase : IUseCase<SetPaymentDAO, UseCaseOutput<int>>
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IUseCase<UpdateOrderStatusDAO, UseCaseOutput<int>> _updateOrderStatusUseCase;
         private readonly IPaymentRepository _paymentRepository;
 
         public SetPaymentUseCase(
-            IOrderRepository orderRepository,
+            IUseCase<UpdateOrderStatusDAO, UseCaseOutput<int>> updateOrderStatusUseCase,
             IPaymentRepository paymentRepository
         )
         {
-            _orderRepository = orderRepository;
+            _updateOrderStatusUseCase = updateOrderStatusUseCase;
             _paymentRepository = paymentRepository;
         }
 
@@ -32,7 +33,7 @@ namespace TechChallenge.Application.Order.SetPayment
 
                 var result = await _paymentRepository.SetPayment(payment);
 
-                await _orderRepository.UpdateOrderStatus(input.OrderId, Domain.Enums.OrderStatus.RECEIVED);
+                _ = UpdateOrderStatus(result);
 
                 return new UseCaseOutput<int>(result);
             }
@@ -40,6 +41,12 @@ namespace TechChallenge.Application.Order.SetPayment
             {
                 return new UseCaseOutput<int>(errorMessage: $"Erro ao registrar pagamento OrderId: {input.OrderId} - {ex.Message}");
             }            
+        }
+
+        private async Task UpdateOrderStatus(int orderId)
+        {
+            var useCaseDao = new UpdateOrderStatusDAO(orderId, Domain.Enums.OrderStatus.RECEIVED);
+            await _updateOrderStatusUseCase.Handle(useCaseDao);
         }
     }
 }

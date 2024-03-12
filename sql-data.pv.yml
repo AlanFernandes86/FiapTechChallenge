@@ -11,4 +11,4 @@ spec:
   storageClassName: local-storage
   volumeMode: Filesystem
   hostPath:
-    path: C:\Apps\FiapTechChallenge\data
+    path: \data

@@ -311,5 +311,5 @@ INSERT INTO [dbo].[client]
      VALUES
            (29642467003,'João Apolinário','apo.joao@email.com',GETDATE(),GETDATE()),
 		   (67723050003,'Peter Parker','email.secreto@aranha.com',GETDATE(),GETDATE()),
-		   (0,'Anônimo','email@email.com',GETDATE(),GETDATE())
+		   (0,'Anonimo','email@anonimo.com',GETDATE(),GETDATE())
 GO

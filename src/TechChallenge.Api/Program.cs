@@ -1,9 +1,8 @@
-using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using TechChallenge.Api;
-using TechChallenge.Application.Order.UpdateOrderStatus;
+using TechChallenge.Application.Hubs;
+using TechChallenge.Domain.Options;
 using TechChallenge.Infra;
 
 string[] ApiVersions = { "v1" };
@@ -37,8 +36,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddGatewaysAndUseCases();
-
-builder.Services.AddScoped<IValidator<UpdateOrderStatusDAO>, UpdateOrderStatusDAOValidator>();
+builder.Services.AddValidators();
 
 builder.Services.AddApiVersioning(config =>
 {
@@ -47,15 +45,19 @@ builder.Services.AddApiVersioning(config =>
     config.ReportApiVersions = true;
 });
 
+builder.Services.AddSignalR();
+builder.Services.Configure<OrderHubOptions>(builder.Configuration.GetSection(nameof(OrderHubOptions)));
+
 var app = builder.Build();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.UseRouting().UseEndpoints(e =>
 {
     e.MapControllers();
+    e.MapHub<OrderHub>("/OrderHub");
 });
 
 // Configure the HTTP request pipeline.

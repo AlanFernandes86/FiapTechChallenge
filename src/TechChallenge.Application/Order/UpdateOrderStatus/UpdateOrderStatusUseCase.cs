@@ -1,6 +1,9 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.SignalR;
 using TechChallenge.Application.Common.UseCase.Interfaces;
 using TechChallenge.Application.Common.UseCase.Models;
+using TechChallenge.Application.Hubs;
+using TechChallenge.Domain.Enums;
 using TechChallenge.Domain.Repositories;
 
 namespace TechChallenge.Application.Order.UpdateOrderStatus
@@ -8,11 +11,17 @@ namespace TechChallenge.Application.Order.UpdateOrderStatus
     public class UpdateOrderStatusUseCase : IUseCase<UpdateOrderStatusDAO, UseCaseOutput<int>>
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IHubContext<OrderHub> _hubContext;
         private readonly IValidator<UpdateOrderStatusDAO> _validator;
 
-        public UpdateOrderStatusUseCase(IOrderRepository orderRepository, IValidator<UpdateOrderStatusDAO> validator)
+        public UpdateOrderStatusUseCase(
+            IOrderRepository orderRepository,
+            IHubContext<OrderHub> hubContext,
+            IValidator<UpdateOrderStatusDAO> validator
+            )
         {
             _orderRepository = orderRepository;
+            _hubContext = hubContext;
             _validator = validator;
         }
 
@@ -34,12 +43,28 @@ namespace TechChallenge.Application.Order.UpdateOrderStatus
                     return new UseCaseOutput<int>(new Validation("ORDER_NOT_FOUND", $"pedido id: [{input.OrderId}] - não encontrado"));
                 }
 
+                _ = SendActiveOrders();
+
                 return new UseCaseOutput<int>(orderId);
             }
             catch (Exception ex)
             {
                 return new UseCaseOutput<int>($"Erro ao atualizar status do pedido id: [{input.OrderId}] - {ex.Message}");
             }            
+        }
+
+        private async Task SendActiveOrders()
+        {
+            try
+            {
+                var activeOrders = await _orderRepository.GetOrdersByStatus(OrderStatus.ACTIVE);
+
+                await _hubContext.Clients.All.SendAsync("ActiveOrders", activeOrders);
+            }
+            catch (Exception ex)
+            {
+                await Console.Out.WriteLineAsync(ex.Message);
+            }
         }
     }
 }

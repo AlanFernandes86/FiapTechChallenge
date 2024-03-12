@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using TechChallenge.Application.Common.UseCase.Interfaces;
 using TechChallenge.Application.Common.UseCase.Models;
 using TechChallenge.Application.Order.CreateOrder;
@@ -58,6 +59,12 @@ public static class DependencyInjection
         services.AddTransient<IUseCase<GetProductsByCategoryDAO, UseCaseOutput<IEnumerable<Product>>>,  GetProductsByCategoryUseCase>();
         services.AddTransient<IUseCase<PutProductDAO, UseCaseOutput<int>>, PutProductUseCase>();
         services.AddTransient<IUseCase<PutProductCategoryDAO, UseCaseOutput<int>>, PutProductCategoryUseCase>();
+    }
+
+    public static void AddValidators(this IServiceCollection services)
+    {
+        services.AddScoped<IValidator<UpdateOrderStatusDAO>, UpdateOrderStatusDAOValidator>();
+        services.AddScoped<IValidator<CreateOrderDAO>, CreateOrderDAOValidator>();
     }
 
 }

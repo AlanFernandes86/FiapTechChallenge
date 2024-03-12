@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
-using TechChallenge.Application.Order.UpdateOrderStatus;
 using TechChallenge.Domain.Enums;
+
+namespace TechChallenge.Application.Order.UpdateOrderStatus;
 
 public class UpdateOrderStatusDAOValidator : AbstractValidator<UpdateOrderStatusDAO>
 {

@@ -5,12 +5,12 @@ namespace TechChallenge.Application.Order.CreateOrder;
 
 public class CreateOrderDAO: IUseCaseDAO
 {
-    public long ClientCpf { get; set; } = 0;
-
-    public List<OrderProductDAO> Products { get; set; }
+    public string ClientCpf { get; set; } = string.Empty;
+    public string ClientName { get; set; } = string.Empty;
+    public List<ProductOnOrderDAO> Products { get; set; }
 }
 
-public class OrderProductDAO: IUseCaseDAO
+public class ProductOnOrderDAO: IUseCaseDAO
 {
     public int ProductId { get; set; }
     public float Price { get; set; }

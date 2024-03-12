@@ -26,4 +26,8 @@
     <ProjectReference Include="..\TechChallenge.Domain\TechChallenge.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Entities\" />
+  </ItemGroup>
+
 </Project>

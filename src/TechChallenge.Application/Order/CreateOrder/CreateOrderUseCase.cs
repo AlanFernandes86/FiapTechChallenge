@@ -1,46 +1,55 @@
-﻿using TechChallenge.Application.Common.UseCase.Interfaces;
+﻿using FluentValidation;
+using TechChallenge.Application.Common.UseCase.Interfaces;
 using TechChallenge.Application.Common.UseCase.Models;
 using TechChallenge.Domain.Entities;
 using TechChallenge.Domain.Enums;
 using TechChallenge.Domain.Repositories;
 
-namespace TechChallenge.Application.Order.CreateOrder
+namespace TechChallenge.Application.Order.CreateOrder;
+
+public class CreateOrderUseCase : IUseCase<CreateOrderDAO, UseCaseOutput<int>>
 {
-    public class CreateOrderUseCase : IUseCase<CreateOrderDAO, UseCaseOutput<int>>
+    private readonly IOrderRepository _orderRepository;
+    private readonly IValidator<CreateOrderDAO> _validator;
+
+    public CreateOrderUseCase(IOrderRepository orderRepository, IValidator<CreateOrderDAO> validator)
     {
-        private readonly IOrderRepository _orderRepository;
+        _orderRepository = orderRepository;
+        _validator = validator;
+    }
 
-        public CreateOrderUseCase(IOrderRepository orderRepository)
+    public async Task<UseCaseOutput<int>> Handle(CreateOrderDAO input)
+    {
+        try
         {
-            _orderRepository = orderRepository;
-        }
+            var validationResult = await _validator.ValidateAsync(input);
 
-        public async Task<UseCaseOutput<int>> Handle(CreateOrderDAO input)
-        {
-            try
+            if (!validationResult.IsValid)
             {
-                var order = new Domain.Entities.Order
+                return new UseCaseOutput<int>(new Validation(validationResult.Errors.FirstOrDefault()?.ErrorCode!, validationResult.Errors.FirstOrDefault()?.ErrorMessage!));
+            }
+
+            var order = new Domain.Entities.Order
+            {
+                StatusId = OrderStatus.CREATED,
+                ClientCpf = input.ClientCpf,
+                ProductsOnOrder = input.Products.Select(x => new ProductOnOrder
                 {
-                    StatusId = OrderStatus.CREATED,
-                    ClientCpf = input.ClientCpf,
-                    ProductsOnOrder = input.Products.Select(x => new ProductOnOrder
-                    {
-                        ProductId = x.ProductId,
-                        Price = x.Price,
-                        Quantity = x.Quantity
-                    }).ToList()
-                };
+                    ProductId = x.ProductId,
+                    Price = x.Price,
+                    Quantity = x.Quantity
+                }).ToList()
+            };
 
-                var ordersByStatus = await _orderRepository.CreateOrder(order);
+            var ordersByStatus = await _orderRepository.CreateOrder(order);
 
-                return new UseCaseOutput<int>(ordersByStatus);
-            }
-            catch (Exception ex)
-            {
-                var cpfOrAnonymous = input.ClientCpf == 0 ? "Anônimo" : input.ClientCpf.ToString();
-                return new UseCaseOutput<int>($"Erro ao criar novo pedido para o cliente cpf: [{cpfOrAnonymous}] - {ex.Message}");
-            }
-            
+            return new UseCaseOutput<int>(ordersByStatus);
         }
+        catch (Exception ex)
+        {
+            var cpfOrAnonymous = input.ClientCpf == string.Empty ? "Anônimo" : input.ClientCpf.ToString();
+            return new UseCaseOutput<int>($"Erro ao criar novo pedido para o cliente cpf: [{cpfOrAnonymous}] - {ex.Message}");
+        }
+        
     }
 }

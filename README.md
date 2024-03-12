@@ -18,6 +18,7 @@ O back-end deve permitir:
 
 ## Requisitos de infraestrutura
 
+![image](https://github.com/AlanFernandes86/FiapTechChallenge/assets/62666226/19a267b8-392b-4505-bcfd-f7bec4301ec0)
 
 ## Link do swagger
 

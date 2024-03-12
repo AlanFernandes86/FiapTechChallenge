@@ -9,6 +9,7 @@ public class Order
     public OrderStatus StatusId { get; set; }
 
     public string ClientCpf { get; set; }
+    public string ClientName { get; set; }
 
     public List<ProductOnOrder> ProductsOnOrder { get; set; }    
 

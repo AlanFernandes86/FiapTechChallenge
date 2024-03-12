@@ -32,7 +32,8 @@ public class CreateOrderUseCase : IUseCase<CreateOrderDAO, UseCaseOutput<int>>
             var order = new Domain.Entities.Order
             {
                 StatusId = OrderStatus.CREATED,
-                ClientCpf = input.ClientCpf,
+                ClientCpf = string.IsNullOrWhiteSpace(input.ClientCpf) ? "0" : input.ClientCpf,
+                ClientName = input.ClientName,
                 ProductsOnOrder = input.Products.Select(x => new ProductOnOrder
                 {
                     ProductId = x.ProductId,

@@ -118,6 +118,7 @@ CREATE TABLE [dbo].[order](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[order_status_id] [int] NOT NULL,
 	[client_cpf] [varchar](11) NULL,
+	[client_name] [varchar](11) NULL,
 	[updated_at] [datetime] NOT NULL,
 	[created_at] [datetime] NOT NULL,
  CONSTRAINT [PK_order] PRIMARY KEY CLUSTERED 

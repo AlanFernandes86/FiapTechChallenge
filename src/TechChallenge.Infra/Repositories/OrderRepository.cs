@@ -29,6 +29,7 @@ public class OrderRepository: IOrderRepository
         var sql = @"SELECT o.[id]
                       ,o.[order_status_id] as StatusId
                       ,o.[client_cpf] as ClientCpf
+                      ,o.[client_name] as ClientName
                       ,o.[updated_at]
                       ,o.[created_at]
                       ,op.[id]
@@ -72,6 +73,7 @@ public class OrderRepository: IOrderRepository
         var sql = @"SELECT o.[id]
                       ,o.[order_status_id] as StatusId
                       ,o.[client_cpf] as ClientCpf
+                      ,o.[client_name] as ClientName
                       ,o.[updated_at]
                       ,o.[created_at]
                       ,op.[id]
@@ -118,6 +120,7 @@ public class OrderRepository: IOrderRepository
                            (
                             [order_status_id]
                            ,[client_cpf]
+                           ,[client_name]
                            ,[updated_at]
                            ,[created_at]
                             )
@@ -126,6 +129,7 @@ public class OrderRepository: IOrderRepository
                            (
                             @status
                            ,@clientCpf
+                           ,@clientName
                            ,GETDATE()
                            ,GETDATE()
                             )";
@@ -133,6 +137,7 @@ public class OrderRepository: IOrderRepository
             var parameters = new DynamicParameters();
             parameters.Add("status", OrderStatus.CREATED);
             parameters.Add("clientCpf", order.ClientCpf);
+            parameters.Add("clientName", order.ClientName);
 
             var orderId = await _dbConnection.QueryFirstOrDefaultAsync<int>(sql, parameters);
 

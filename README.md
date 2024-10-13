@@ -1,6 +1,6 @@
 # Fiap Tech Challenge - Fase 2
 
-Projeto referente a entrega da fase 2 do Tech Challenge do curso Software Architecture Pós Tech - turma 5SOAT.
+Projeto referente a entrega da fase 2 do Tech Challenge do curso Software Architecture Pós Tech - turma 8SOAT.
 
 ## Requisitos do negócio
 
@@ -16,25 +16,29 @@ O back-end deve permitir:
 - Acompanhar o status de cada pedido
 - Cadastrar produtos por categoria
 
-## Requisitos de infraestrutura
+## Desenho da Arquitetura
 
+![image](https://github.com/user-attachments/assets/047b0e48-f5ad-4d03-b957-0ec36f959671)
 
-## Link do swagger
+## Como executar o projeto no kubernetes local
 
-http://<ip-do-minekube>:31116/swagger/index.html
+Obs* Projeto configurado para executar localmente, para esse exemplo foi utilizado o Kubernetes do Docker Desktop.
 
-## Como executar o projeto
+1. Primeiro instale o Docker Desktop caso não tenha e em seguida habilite o Kubernetes:
+![image](https://github.com/user-attachments/assets/bfcee42a-480a-42a2-9ff8-caab3e997c5d)
 
-1 - Abrir o terminal e navegar até a pasta do projeto
-2 - Executar os seguintes comando do kubectl na ordem
-- kubectl apply -f sql-data.pv.yml
-- kubectl apply -f sql-data.pvc.yml
-- kubectl apply -f sql-server.statefulset.yml
-- kubectl apply -f sql-server.service.yml
-- kubectl apply -f techchallenge.api.deployment.yml
-- kubectl apply -f techchallenge.api.service.yml
-- kubectl apply -f sql-server.configmap.yml
-- kubectl apply -f mssqltools.job.yml
+2. Realize o clone do projeto na branch main e navegue até a pasta.
+3. Dentro da pasta da aplicação abra o terminal e execute os comandos.
 
-## Link da collection incial no postman
+```docker-compose up -d```  
+
+Disponibilizará o Sql Server e Broker Kafka que serão consumidos pela aplicação.  
+
+![image](https://github.com/user-attachments/assets/025d4d33-d380-411f-96b3-834e5568c9d3)  
+
+```kubectl apply -f k8s```
+Implantará a aplicação no k8s local
+![image](https://github.com/user-attachments/assets/458f66b1-418d-49bd-8a41-584a5bdc695c)
+
+## Link da collection do postman para teste local
 https://github.com/AlanFernandes86/FiapTechChallenge/blob/feature/fase2/TechChallenge.postman_collection.json
